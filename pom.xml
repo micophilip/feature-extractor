@@ -13,6 +13,35 @@
         <maven.compiler.target>13</maven.compiler.target>
     </properties>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.uima</groupId>
+                <artifactId>jcasgen-maven-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+
+                            <typeSystemIncludes>
+                                <typeSystemInclude>src/main/resources/desc/type/Features.xml</typeSystemInclude>
+                            </typeSystemIncludes>
+
+                            <typeSystemExcludes></typeSystemExcludes>
+
+                            <outputDirectory>${project.build.sourceDirectory}</outputDirectory>
+
+                            <limitToProject>false</limitToProject>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
