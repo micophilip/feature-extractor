@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<typeSystemDescription xmlns="http://uima.apache.org/resourceSpecifier">
+    <name>Features</name>
+    <description/>
+    <version>1.0</version>
+    <vendor/>
+    <types>
+        <typeDescription>
+            <name>ca.uottawa.csi5137.type.Features</name>
+            <description/>
+            <supertypeName>uima.tcas.Annotation</supertypeName>
+            <features>
+                <featureDescription>
+                    <name>position</name>
+                    <description>F1-The position of “it” in the sentence considering the number of tokens, e.g., “it” is the first token in the sentence “It was raining!”, so the value of this feature for our example sentence is 1.</description>
+                    <rangeTypeName>uima.cas.Integer</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>sentLenInTokens</name>
+                    <description>F2-The length of the sentence in terms of tokens, e.g., “It was raining!” has four tokens, so the value is 4.</description>
+                    <rangeTypeName>uima.cas.Integer</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>numPunct</name>
+                    <description>F3-The number of punctuations, e.g., “It was raining!” has one punctuation mark, so the value is 1.</description>
+                    <rangeTypeName>uima.cas.Integer</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>numPrecedingNP</name>
+                    <description>F4-The number of preceding noun phrases (that is: how many noun phrases come before a certain instance of “it”?) For F4, we count only the atomic noun phrases.</description>
+                    <rangeTypeName>uima.cas.Integer</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>numFollowingNP</name>
+                    <description>F5-The number of noun phrases that follow a given instance of “it”. Like in F4, F5 is concerned with atomic noun phrases.</description>
+                    <rangeTypeName>uima.cas.Integer</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>followsPrepPhrase</name>
+                    <description>F6-Does the pronoun “it” immediately follow a prepositional phrase? (Yes/No)</description>
+                    <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>fourPosTagsPrecedingFollowing</name>
+                    <description>F7-The part-of-speech (POS) tags of the four tokens immediately preceding and the four tokens immediately succeeding a given instance of “it”. If there are less than four tokens before/after, assign a special value, e.g., ABS (absent) to the missing POS tags.</description>
+                    <rangeTypeName>uima.cas.StringList</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>followedByVBG</name>
+                    <description>F8-Is the occurrence of “it” followed by an -ing form of a verb? (Yes/No)</description>
+                    <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>followedByPrep</name>
+                    <description>F9-Is the occurrence of “it” followed by a preposition? (Yes/No)</description>
+                    <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>numFollowingAdj</name>
+                    <description>F10-The number of adjectives that follow the occurrence of “it” in the sentence.</description>
+                    <rangeTypeName>uima.cas.Integer</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>followsVerb</name>
+                    <description>F11-Is the pronoun “it” preceded by a verb? (Yes/No)</description>
+                    <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>followedByVerb</name>
+                    <description>F12-Is the pronoun “it” followed by a verb? (Yes/No)</description>
+                    <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>followedByAdj</name>
+                    <description>F13-Is the pronoun “it” followed by an adjective? (Yes/No)</description>
+                    <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>followedByNPAdj</name>
+                    <description>F14-True if there is a noun phrase coming after the pronoun “it” and that noun phrase contains an adjective, otherwise false.</description>
+                    <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>numTokensPrecedingFollowingInfinitiveVerb</name>
+                    <description>F15-The number of tokens coming before the following infinitive verb (if there is one), otherwise 0.</description>
+                    <rangeTypeName>uima.cas.Integer</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>numTokensUntilNextPrep</name>
+                    <description>F16-The number of tokens that appear between the pronoun “it” and the first following preposition (if there is a following preposition), otherwise 0.</description>
+                    <rangeTypeName>uima.cas.Integer</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>followedBySeqAdjNP</name>
+                    <description>F17-True if there a sequence “adjective + noun phrase” following the pronoun “it”, and false otherwise.</description>
+                    <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>depRelType</name>
+                    <description>F18-The dependency relation type with the closest word to which “it” is associated as a dependent.</description>
+                    <rangeTypeName>uima.cas.String</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>nextFollowingVerbInWeather</name>
+                    <description>F19-True if the immediately following verb belongs to the category “weather adjectives”, and false otherwise.</description>
+                    <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>nextFollowingVerbInCognition</name>
+                    <description>F20-True if the immediately following verb belongs to the category of cognitive verbs, and false otherwise.</description>
+                    <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+                </featureDescription>
+            </features>
+        </typeDescription>
+
+    </types>
+</typeSystemDescription>
