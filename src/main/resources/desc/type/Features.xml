@@ -43,7 +43,7 @@
                 <featureDescription>
                     <name>fourPosTagsPrecedingFollowing</name>
                     <description>F7-The part-of-speech (POS) tags of the four tokens immediately preceding and the four tokens immediately succeeding a given instance of “it”. If there are less than four tokens before/after, assign a special value, e.g., ABS (absent) to the missing POS tags.</description>
-                    <rangeTypeName>uima.cas.StringList</rangeTypeName>
+                    <rangeTypeName>uima.cas.String</rangeTypeName>
                 </featureDescription>
                 <featureDescription>
                     <name>followedByVBG</name>

@@ -1,18 +1,17 @@
 
 
-/* First created by JCasGen Mon Oct 19 21:11:57 EDT 2020 */
+/* First created by JCasGen Mon Oct 19 22:33:38 EDT 2020 */
 package ca.uottawa.csi5137.type;
 
 import org.apache.uima.jcas.JCas; 
 import org.apache.uima.jcas.JCasRegistry;
 import org.apache.uima.jcas.cas.TOP_Type;
 
-import org.apache.uima.jcas.cas.StringList;
 import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** 
- * Updated by JCasGen Mon Oct 19 21:11:57 EDT 2020
+ * Updated by JCasGen Mon Oct 19 22:33:38 EDT 2020
  * XML source: /Users/mico/Documents/mcs/csi5137b/assignment_2/feature-extractor/target/jcasgen/typesystem.xml
  * @generated */
 public class Features extends Annotation {
@@ -216,19 +215,19 @@ public class Features extends Annotation {
    * @generated
    * @return value of the feature 
    */
-  public StringList getFourPosTagsPrecedingFollowing() {
+  public String getFourPosTagsPrecedingFollowing() {
     if (Features_Type.featOkTst && ((Features_Type)jcasType).casFeat_fourPosTagsPrecedingFollowing == null)
       jcasType.jcas.throwFeatMissing("fourPosTagsPrecedingFollowing", "ca.uottawa.csi5137.type.Features");
-    return (StringList)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((Features_Type)jcasType).casFeatCode_fourPosTagsPrecedingFollowing)));}
+    return jcasType.ll_cas.ll_getStringValue(addr, ((Features_Type)jcasType).casFeatCode_fourPosTagsPrecedingFollowing);}
     
   /** setter for fourPosTagsPrecedingFollowing - sets F7-The part-of-speech (POS) tags of the four tokens immediately preceding and the four tokens immediately succeeding a given instance of “it”. If there are less than four tokens before/after, assign a special value, e.g., ABS (absent) to the missing POS tags. 
    * @generated
    * @param v value to set into the feature 
    */
-  public void setFourPosTagsPrecedingFollowing(StringList v) {
+  public void setFourPosTagsPrecedingFollowing(String v) {
     if (Features_Type.featOkTst && ((Features_Type)jcasType).casFeat_fourPosTagsPrecedingFollowing == null)
       jcasType.jcas.throwFeatMissing("fourPosTagsPrecedingFollowing", "ca.uottawa.csi5137.type.Features");
-    jcasType.ll_cas.ll_setRefValue(addr, ((Features_Type)jcasType).casFeatCode_fourPosTagsPrecedingFollowing, jcasType.ll_cas.ll_getFSRef(v));}    
+    jcasType.ll_cas.ll_setStringValue(addr, ((Features_Type)jcasType).casFeatCode_fourPosTagsPrecedingFollowing, v);}    
    
     
   //*--------------*

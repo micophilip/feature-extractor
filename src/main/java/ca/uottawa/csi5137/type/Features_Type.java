@@ -1,5 +1,5 @@
 
-/* First created by JCasGen Mon Oct 19 21:11:57 EDT 2020 */
+/* First created by JCasGen Mon Oct 19 22:33:38 EDT 2020 */
 package ca.uottawa.csi5137.type;
 
 import org.apache.uima.jcas.JCas;
@@ -11,7 +11,7 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.tcas.Annotation_Type;
 
 /** 
- * Updated by JCasGen Mon Oct 19 21:11:57 EDT 2020
+ * Updated by JCasGen Mon Oct 19 22:33:38 EDT 2020
  * @generated */
 public class Features_Type extends Annotation_Type {
   /** @generated */
@@ -174,19 +174,19 @@ public class Features_Type extends Annotation_Type {
    * @param addr low level Feature Structure reference
    * @return the feature value 
    */ 
-  public int getFourPosTagsPrecedingFollowing(int addr) {
+  public String getFourPosTagsPrecedingFollowing(int addr) {
         if (featOkTst && casFeat_fourPosTagsPrecedingFollowing == null)
       jcas.throwFeatMissing("fourPosTagsPrecedingFollowing", "ca.uottawa.csi5137.type.Features");
-    return ll_cas.ll_getRefValue(addr, casFeatCode_fourPosTagsPrecedingFollowing);
+    return ll_cas.ll_getStringValue(addr, casFeatCode_fourPosTagsPrecedingFollowing);
   }
   /** @generated
    * @param addr low level Feature Structure reference
    * @param v value to set 
    */    
-  public void setFourPosTagsPrecedingFollowing(int addr, int v) {
+  public void setFourPosTagsPrecedingFollowing(int addr, String v) {
         if (featOkTst && casFeat_fourPosTagsPrecedingFollowing == null)
       jcas.throwFeatMissing("fourPosTagsPrecedingFollowing", "ca.uottawa.csi5137.type.Features");
-    ll_cas.ll_setRefValue(addr, casFeatCode_fourPosTagsPrecedingFollowing, v);}
+    ll_cas.ll_setStringValue(addr, casFeatCode_fourPosTagsPrecedingFollowing, v);}
     
   
  
@@ -538,7 +538,7 @@ public class Features_Type extends Annotation_Type {
     casFeatCode_followsPrepPhrase  = (null == casFeat_followsPrepPhrase) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_followsPrepPhrase).getCode();
 
  
-    casFeat_fourPosTagsPrecedingFollowing = jcas.getRequiredFeatureDE(casType, "fourPosTagsPrecedingFollowing", "uima.cas.StringList", featOkTst);
+    casFeat_fourPosTagsPrecedingFollowing = jcas.getRequiredFeatureDE(casType, "fourPosTagsPrecedingFollowing", "uima.cas.String", featOkTst);
     casFeatCode_fourPosTagsPrecedingFollowing  = (null == casFeat_fourPosTagsPrecedingFollowing) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_fourPosTagsPrecedingFollowing).getCode();
 
  
