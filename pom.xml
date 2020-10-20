@@ -11,36 +11,8 @@
     <properties>
         <maven.compiler.source>13</maven.compiler.source>
         <maven.compiler.target>13</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.uima</groupId>
-                <artifactId>jcasgen-maven-plugin</artifactId>
-                <version>3.1.1</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-
-                            <typeSystemIncludes>
-                                <typeSystemInclude>src/main/resources/desc/type/Features.xml</typeSystemInclude>
-                            </typeSystemIncludes>
-
-                            <typeSystemExcludes></typeSystemExcludes>
-
-                            <outputDirectory>${project.build.sourceDirectory}</outputDirectory>
-
-                            <limitToProject>false</limitToProject>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
     <dependencies>
         <dependency>
@@ -144,5 +116,34 @@
             <version>1.2.0.1</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.uima</groupId>
+                <artifactId>jcasgen-maven-plugin</artifactId>
+                <version>2.10.4</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+
+                            <typeSystemIncludes>
+                                <typeSystemInclude>src/main/resources/desc/type/Features.xml</typeSystemInclude>
+                            </typeSystemIncludes>
+
+                            <typeSystemExcludes></typeSystemExcludes>
+
+                            <outputDirectory>${project.build.sourceDirectory}</outputDirectory>
+
+                            <limitToProject>false</limitToProject>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
