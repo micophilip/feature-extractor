@@ -29,7 +29,8 @@ public class FeatureExtractionPipeline {
                 TextReader.PARAM_LANGUAGE, "en");
 
         // Tokenizer
-        AnalysisEngineDescription tokenizer = createEngineDescription(BreakIteratorSegmenter.class);
+        AnalysisEngineDescription tokenizer = createEngineDescription(BreakIteratorSegmenter.class,
+                BreakIteratorSegmenter.PARAM_SPLIT_AT_APOSTROPHE, true);
 
         // POS-Tagger
         AnalysisEngineDescription posTagger = createEngineDescription(OpenNlpPosTagger.class);
@@ -44,7 +45,8 @@ public class FeatureExtractionPipeline {
         AnalysisEngineDescription extractor = createEngineDescription(FeatureExtractor.class);
 
         // Feature Matrix Writer
-        AnalysisEngineDescription featureWriter = createPrimitiveDescription(FeatureMatrixWriter.class, FeatureMatrixWriter.PARAM_PATH, PATH);
+        AnalysisEngineDescription featureWriter = createPrimitiveDescription(FeatureMatrixWriter.class,
+                FeatureMatrixWriter.PARAM_PATH, PATH);
 
         SimplePipeline.runPipeline(reader, tokenizer, posTagger, chunker, parser, extractor, featureWriter);
 

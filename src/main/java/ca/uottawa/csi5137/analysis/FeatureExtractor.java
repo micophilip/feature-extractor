@@ -2,11 +2,14 @@ package ca.uottawa.csi5137.analysis;
 
 import ca.uottawa.csi5137.type.Features;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
+import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
+import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.chunk.Chunk;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.jcas.JCas;
 import org.uimafit.component.JCasAnnotator_ImplBase;
 
 import static org.apache.uima.fit.util.JCasUtil.select;
+import static org.apache.uima.fit.util.JCasUtil.selectCovered;
 
 public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
@@ -22,8 +25,8 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
             features.setPosition(getPosition(sentence));
             features.setSentLenInTokens(getSentLenInTokens(sentence));
             features.setNumPunct(getNumPunct(sentence));
-            features.setNumPrecedingNP(getNumPrecedingNP(sentence));
-            features.setNumFollowingNP(getNumFollowingNP(sentence));
+            features.setNumPrecedingNP(getNumPrecedingNP(sentence, aJCas));
+            features.setNumFollowingNP(getNumFollowingNP(sentence, aJCas));
             features.setFollowsPrepPhrase(getFollowsPrepPhrase(sentence));
             features.setFourPosTagsPrecedingFollowing(getFourPosTagsPrecedingFollowing(sentence));
             features.setFollowedByVBG(getFollowedByVBG(sentence));
@@ -46,23 +49,71 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
     }
 
     public int getPosition(Sentence sentence) {
-        return 0;
+        int position = 1;
+        for (Token token : selectCovered(Token.class, sentence)) {
+            if ("it".equalsIgnoreCase(token.getText())) {
+                return position;
+            } else {
+                position++;
+            }
+        }
+        return -1;
     }
 
     public int getSentLenInTokens(Sentence sentence) {
-        return 0;
+        return selectCovered(Token.class, sentence).size();
     }
 
     public int getNumPunct(Sentence sentence) {
-        return 0;
+        int punctuationMarks = 0;
+        for (Token token : selectCovered(Token.class, sentence)) {
+            if ("PUNCT".equalsIgnoreCase(token.getPos().getCoarseValue())) {
+                punctuationMarks++;
+            }
+        }
+        return punctuationMarks;
     }
 
-    public int getNumPrecedingNP(Sentence sentence) {
-        return 0;
+    public int getNumPrecedingNP(Sentence sentence, JCas aJCas) {
+        int positionOfIt = 0;
+        int precedingNPs = 0;
+        int sentenceBegin = sentence.getBegin();
+        for (Token token : selectCovered(Token.class, sentence)) {
+            if ("it".equalsIgnoreCase(token.getText())) {
+                positionOfIt = token.getBegin();
+                break;
+            }
+        }
+
+        Sentence chunked = new Sentence(aJCas, sentenceBegin, positionOfIt);
+
+        for (Chunk chunk : selectCovered(Chunk.class, chunked)) {
+            if ("NP".equalsIgnoreCase(chunk.getChunkValue())) {
+                precedingNPs++;
+            }
+        }
+        return precedingNPs;
     }
 
-    public int getNumFollowingNP(Sentence sentence) {
-        return 0;
+    public int getNumFollowingNP(Sentence sentence, JCas aJCas) {
+        int positionOfIt = 0;
+        int followingNPs = 0;
+        int sentenceEnd = sentence.getEnd();
+        for (Token token : selectCovered(Token.class, sentence)) {
+            if ("it".equalsIgnoreCase(token.getText())) {
+                positionOfIt = token.getEnd();
+                break;
+            }
+        }
+
+        Sentence chunked = new Sentence(aJCas, positionOfIt, sentenceEnd);
+
+        for (Chunk chunk : selectCovered(Chunk.class, chunked)) {
+            if ("NP".equalsIgnoreCase(chunk.getChunkValue())) {
+                followingNPs++;
+            }
+        }
+        return followingNPs;
     }
 
     public boolean getFollowsPrepPhrase(Sentence sentence) {
