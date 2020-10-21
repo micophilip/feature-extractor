@@ -8,6 +8,8 @@ import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.jcas.JCas;
 import org.uimafit.component.JCasAnnotator_ImplBase;
 
+import java.util.List;
+
 import static org.apache.uima.fit.util.JCasUtil.select;
 import static org.apache.uima.fit.util.JCasUtil.selectCovered;
 
@@ -27,8 +29,8 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
             features.setNumPunct(getNumPunct(sentence));
             features.setNumPrecedingNP(getNumPrecedingNP(sentence, aJCas));
             features.setNumFollowingNP(getNumFollowingNP(sentence, aJCas));
-            features.setFollowsPrepPhrase(getFollowsPrepPhrase(sentence));
-            features.setFourPosTagsPrecedingFollowing(getFourPosTagsPrecedingFollowing(sentence));
+            features.setFollowsPrepPhrase(getFollowsPrepPhrase(sentence, aJCas));
+            features.setFourPosTagsPrecedingFollowing(getFourPosTagsPrecedingFollowing(sentence, aJCas));
             features.setFollowedByVBG(getFollowedByVBG(sentence));
             features.setFollowedByPrep(getFollowedByPrep(sentence));
             features.setNumFollowingAdj(getNumFollowingAdj(sentence));
@@ -116,16 +118,90 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
         return followingNPs;
     }
 
-    public boolean getFollowsPrepPhrase(Sentence sentence) {
-        return false;
+    public boolean getFollowsPrepPhrase(Sentence sentence, JCas aJCas) {
+        int positionOfIt = 0;
+        int sentenceBegin = sentence.getBegin();
+
+        for (Token token : selectCovered(Token.class, sentence)) {
+            if ("it".equalsIgnoreCase(token.getText())) {
+                positionOfIt = token.getBegin();
+                break;
+            }
+        }
+
+        // 'it' is the first token in the sentence
+        if (sentenceBegin == positionOfIt) {
+            return false;
+        } else {
+            Sentence chunked = new Sentence(aJCas, sentenceBegin, positionOfIt);
+            List<Chunk> chunks = selectCovered(Chunk.class, chunked);
+            Chunk lastChunk = chunks.get(chunks.size() - 1);
+            return "PP".equalsIgnoreCase(lastChunk.getChunkValue());
+        }
     }
 
-    public String getFourPosTagsPrecedingFollowing(Sentence sentence) {
-        return null;
+    public String getFourPosTagsPrecedingFollowing(Sentence sentence, JCas aJCas) {
+        int beginIt = 0;
+        int endIt = 0;
+        StringBuilder fourPosTagsBeforeAfter = new StringBuilder();
+        String separator = "-";
+        String abs = "ABS";
+        List<Token> tokens = selectCovered(Token.class, sentence);
+        for (Token token : tokens) {
+            if ("it".equalsIgnoreCase(token.getText())) {
+                beginIt = token.getBegin();
+                endIt = token.getEnd();
+                break;
+            }
+        }
+        Sentence preceding = new Sentence(aJCas, sentence.getBegin(), beginIt);
+        Sentence following = new Sentence(aJCas, endIt, sentence.getEnd());
+
+        List<Token> precedingTokens = selectCovered(Token.class, preceding);
+        List<Token> followingTokens = selectCovered(Token.class, following);
+        int precedingTokensSize = precedingTokens.size();
+        int followingTokensSize = followingTokens.size();
+
+        for (int i = 0; i < 4; i++) {
+            if (i < precedingTokensSize) {
+                Token t = precedingTokens.get(precedingTokensSize - i - 1);
+                fourPosTagsBeforeAfter.append(t.getPos().getCoarseValue());
+            } else {
+                fourPosTagsBeforeAfter.append(abs);
+            }
+            fourPosTagsBeforeAfter.append(separator);
+        }
+
+        for (int i = 0; i < 4; i++) {
+            if (i < followingTokensSize) {
+                Token t = followingTokens.get(i);
+                fourPosTagsBeforeAfter.append(t.getPos().getCoarseValue());
+            } else {
+                fourPosTagsBeforeAfter.append(abs);
+            }
+            if (i != 3) {
+                fourPosTagsBeforeAfter.append(separator);
+            }
+        }
+
+        return fourPosTagsBeforeAfter.toString();
     }
 
     public boolean getFollowedByVBG(Sentence sentence) {
-        return false;
+
+        boolean foundIt = false;
+        boolean followedByVBG = false;
+
+        for (Token token : selectCovered(Token.class, sentence)) {
+            if (foundIt) {
+                followedByVBG = "VBG".equalsIgnoreCase(token.getPosValue());
+                break;
+            }
+            if ("it".equalsIgnoreCase(token.getText())) {
+                foundIt = true;
+            }
+        }
+        return followedByVBG;
     }
 
     public boolean getFollowedByPrep(Sentence sentence) {
