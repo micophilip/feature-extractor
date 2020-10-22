@@ -40,7 +40,7 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
             features.setFollowedByNPAdj(getFollowedByNPAdj(sentence, aJCas));
             features.setNumTokensPrecedingFollowingInfinitiveVerb(getNumTokensPrecedingFollowingInfinitiveVerb(sentence));
             features.setNumTokensUntilNextPrep(getNumTokensUntilNextPrep(sentence));
-            features.setFollowedBySeqAdjNP(getFollowedBySeqAdjNP(sentence));
+            features.setFollowedBySeqAdjNP(getFollowedBySeqAdjNP(sentence, aJCas));
             features.setDepRelType(getDepRelType(sentence));
             features.setNextFollowingVerbInWeather(getNextFollowingVerbInWeather(sentence));
             features.setNextFollowingVerbInCognition(getNextFollowingVerbInCognition(sentence));
@@ -351,11 +351,53 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
     }
 
     public int getNumTokensUntilNextPrep(Sentence sentence) {
-        return 0;
+        boolean foundIt = false;
+        int tokensUntilNextPrep = 0;
+        boolean foundPrep = false;
+
+        for (Token token : selectCovered(Token.class, sentence)) {
+
+            if (foundIt) {
+                if ("IN".equalsIgnoreCase(token.getPosValue())) {
+                    foundPrep = true;
+                    break;
+                }
+                tokensUntilNextPrep++;
+            }
+
+
+            if (!foundIt && "it".equalsIgnoreCase(token.getText())) {
+                foundIt = true;
+            }
+        }
+
+        if (foundPrep) return tokensUntilNextPrep;
+        else return 0;
     }
 
-    public boolean getFollowedBySeqAdjNP(Sentence sentence) {
-        return false;
+    public boolean getFollowedBySeqAdjNP(Sentence sentence, JCas aJCas) {
+
+        int positionOfIt = 0;
+        boolean seqFound = false;
+
+        for (Token token : selectCovered(Token.class, sentence)) {
+            if ("it".equalsIgnoreCase(token.getText())) {
+                positionOfIt = token.getEnd();
+                break;
+            }
+        }
+
+        Sentence chunked = new Sentence(aJCas, positionOfIt, sentence.getEnd());
+        Chunk followingChunk = selectCovered(Chunk.class, chunked).get(0);
+        if ("NP".equalsIgnoreCase(followingChunk.getChunkValue())) {
+            Sentence followingNP = new Sentence(aJCas, followingChunk.getEnd(), sentence.getEnd());
+            Token token = selectCovered(Token.class, followingNP).get(0);
+            if ("JJ".equalsIgnoreCase(token.getPosValue())) {
+                seqFound = true;
+            }
+        }
+
+        return seqFound;
     }
 
     public String getDepRelType(Sentence sentence) {
