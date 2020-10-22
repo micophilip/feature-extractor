@@ -377,27 +377,32 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     public boolean getFollowedBySeqAdjNP(Sentence sentence, JCas aJCas) {
 
-        int positionOfIt = 0;
-        boolean seqFound = false;
+        int positionOfAdj = 0;
+        boolean foundIt = false;
 
         for (Token token : selectCovered(Token.class, sentence)) {
-            if ("it".equalsIgnoreCase(token.getText())) {
-                positionOfIt = token.getEnd();
-                break;
+            if (foundIt) {
+                if ("JJ".equalsIgnoreCase(token.getPosValue())) {
+                    positionOfAdj = token.getEnd();
+                    break;
+                } else {
+                    return false;
+                }
+            } else if ("it".equalsIgnoreCase(token.getText())) {
+                foundIt = true;
             }
         }
 
-        Sentence chunked = new Sentence(aJCas, positionOfIt, sentence.getEnd());
-        Chunk followingChunk = selectCovered(Chunk.class, chunked).get(0);
-        if ("NP".equalsIgnoreCase(followingChunk.getChunkValue())) {
-            Sentence followingNP = new Sentence(aJCas, followingChunk.getEnd(), sentence.getEnd());
-            Token token = selectCovered(Token.class, followingNP).get(0);
-            if ("JJ".equalsIgnoreCase(token.getPosValue())) {
-                seqFound = true;
-            }
+        Sentence chunked = new Sentence(aJCas, positionOfAdj, sentence.getEnd());
+
+        List<Chunk> followingChunks = selectCovered(Chunk.class, chunked);
+        if (followingChunks.size() == 0) {
+            return false;
+        } else {
+            Chunk followingChunk = followingChunks.get(0);
+            return "NP".equalsIgnoreCase(followingChunk.getChunkValue());
         }
 
-        return seqFound;
     }
 
     public String getDepRelType(Sentence sentence) {
