@@ -1,4 +1,8 @@
 position,sentLenInTokens,numPunct,numPrecedingNP,numFollowingNP,followsPrepPhrase,fourPosTagsPrecedingFollowing,followedByVBG,followedByPrep,numFollowingAdj,followsVerb,followedByVerb,followedByAdj,followedByNPAdj,numTokensPrecedingFollowingInfinitiveVerb,numTokensUntilNextPrep,followedBySeqAdjNP,depRelType,nextFollowingVerbInWeather,nextFollowingVerbInCognition,class
-1,26,6,0,7,0,ABS-ABS-ABS-ABS-VERB-ADV-ADJ-NOUN,0,0,0,0,0,0,0,0,0,0,null,0,0,EXAMPLE
-11,36,5,3,7,0,VERB-DET-NOUN-ADJ-PUNCT-PRON-VERB-VERB,0,0,0,0,0,0,0,0,0,0,null,0,0,EXAMPLE
-2,3,0,0,0,0,VERB-ABS-ABS-ABS-VERB-ABS-ABS-ABS,1,0,0,0,0,0,0,0,0,0,null,0,0,EXAMPLE
+1,26,6,0,7,0,ABS-ABS-ABS-ABS-VERB-ADV-ADJ-NOUN,0,0,2,0,1,0,0,0,0,0,null,0,0,EXAMPLE
+11,36,5,3,7,0,VERB-DET-NOUN-ADJ-PUNCT-PRON-VERB-VERB,0,0,1,1,0,0,0,16,0,0,null,0,0,EXAMPLE
+2,4,1,0,0,0,VERB-ABS-ABS-ABS-VERB-PUNCT-ABS-ABS,1,0,0,1,1,0,0,0,0,0,null,0,0,EXAMPLE
+2,6,1,0,1,0,VERB-ABS-ABS-ABS-ADP-DET-NOUN-PUNCT,0,1,0,1,0,0,0,0,0,0,null,0,0,EXAMPLE
+3,5,1,1,0,0,VERB-PRON-ABS-ABS-ADJ-PUNCT-ABS-ABS,0,0,1,1,0,1,0,0,0,0,null,0,0,EXAMPLE
+1,4,1,0,1,0,ABS-ABS-ABS-ABS-ADJ-NOUN-PUNCT-ABS,0,0,1,0,0,1,1,0,0,0,null,0,0,EXAMPLE
+1,6,1,0,0,0,ABS-ABS-ABS-ABS-VERB-ADJ-ADP-VERB,0,0,1,0,1,0,0,2,0,0,null,0,0,EXAMPLE
