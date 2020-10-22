@@ -145,8 +145,12 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
         } else {
             Sentence chunked = new Sentence(aJCas, sentenceBegin, positionOfIt);
             List<Chunk> chunks = selectCovered(Chunk.class, chunked);
-            Chunk lastChunk = chunks.get(chunks.size() - 1);
-            return "PP".equalsIgnoreCase(lastChunk.getChunkValue());
+            if (chunks.size() == 0) {
+                return false;
+            } else {
+                Chunk lastChunk = chunks.get(chunks.size() - 1);
+                return "PP".equalsIgnoreCase(lastChunk.getChunkValue());
+            }
         }
     }
 
@@ -313,13 +317,16 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
         }
 
         Sentence chunked = new Sentence(aJCas, positionOfIt, sentence.getEnd());
-        Chunk firstChunk = selectCovered(Chunk.class, chunked).get(0);
-        if ("NP".equalsIgnoreCase(firstChunk.getChunkValue())) {
-            Sentence tokenizedChunk = new Sentence(aJCas, firstChunk.getBegin(), firstChunk.getEnd());
-            for (Token tokenInNP : selectCovered(Token.class, tokenizedChunk)) {
-                if ("JJ".equalsIgnoreCase(tokenInNP.getPosValue())) {
-                    npContainsAdj = true;
-                    break;
+        List<Chunk> chunks = selectCovered(Chunk.class, chunked);
+        if (chunks.size() > 0) {
+            Chunk firstChunk = chunks.get(0);
+            if ("NP".equalsIgnoreCase(firstChunk.getChunkValue())) {
+                Sentence tokenizedChunk = new Sentence(aJCas, firstChunk.getBegin(), firstChunk.getEnd());
+                for (Token tokenInNP : selectCovered(Token.class, tokenizedChunk)) {
+                    if ("JJ".equalsIgnoreCase(tokenInNP.getPosValue())) {
+                        npContainsAdj = true;
+                        break;
+                    }
                 }
             }
         }
