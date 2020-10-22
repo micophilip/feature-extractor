@@ -4,6 +4,12 @@ import ca.uottawa.csi5137.type.Features;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.chunk.Chunk;
+import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency;
+import net.sf.extjwnl.JWNLException;
+import net.sf.extjwnl.data.IndexWord;
+import net.sf.extjwnl.data.POS;
+import net.sf.extjwnl.data.Synset;
+import net.sf.extjwnl.dictionary.Dictionary;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.jcas.JCas;
 import org.uimafit.component.JCasAnnotator_ImplBase;
@@ -42,8 +48,12 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
             features.setNumTokensUntilNextPrep(getNumTokensUntilNextPrep(sentence));
             features.setFollowedBySeqAdjNP(getFollowedBySeqAdjNP(sentence, aJCas));
             features.setDepRelType(getDepRelType(sentence));
-            features.setNextFollowingVerbInWeather(getNextFollowingVerbInWeather(sentence));
-            features.setNextFollowingVerbInCognition(getNextFollowingVerbInCognition(sentence));
+            try {
+                features.setNextFollowingVerbInWeather(getNextFollowingVerbInWeather(sentence));
+                features.setNextFollowingVerbInCognition(getNextFollowingVerbInCognition(sentence));
+            } catch (JWNLException e) {
+                e.printStackTrace();
+            }
 
             features.addToIndexes();
         }
@@ -406,14 +416,69 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
     }
 
     public String getDepRelType(Sentence sentence) {
-        return "null";
+        for (Dependency dependency : selectCovered(Dependency.class, sentence)) {
+            if ("it".equalsIgnoreCase(dependency.getGovernor().getText()))
+                System.out.println(String.format("it is the governor of %s", dependency.getDependent().getText()));
+            if ("it".equalsIgnoreCase(dependency.getDependent().getText())) {
+                return dependency.getDependencyType();
+            }
+        }
+
+        return "ABS";
     }
 
-    public boolean getNextFollowingVerbInWeather(Sentence sentence) {
+    public boolean getNextFollowingVerbInWeather(Sentence sentence) throws JWNLException {
+
+        boolean foundIt = false;
+        Dictionary dictionary = Dictionary.getDefaultResourceInstance();
+
+        for (Token token : selectCovered(Token.class, sentence)) {
+
+            if (foundIt) {
+                if ("VERB".equalsIgnoreCase(token.getPos().getCoarseValue())) {
+                    IndexWord iw = dictionary.lookupIndexWord(POS.VERB, token.getText());
+                    if (iw != null && iw.getSenses().size() > 0) {
+                        for (Synset synset : iw.getSenses()) {
+                            return "verb.weather".equalsIgnoreCase(synset.getLexFileName());
+                        }
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            } else if ("it".equalsIgnoreCase(token.getText())) {
+                foundIt = true;
+            }
+        }
+
         return false;
     }
 
-    public boolean getNextFollowingVerbInCognition(Sentence sentence) {
+    public boolean getNextFollowingVerbInCognition(Sentence sentence) throws JWNLException {
+        boolean foundIt = false;
+        Dictionary dictionary = Dictionary.getDefaultResourceInstance();
+
+        for (Token token : selectCovered(Token.class, sentence)) {
+
+            if (foundIt) {
+                if ("VERB".equalsIgnoreCase(token.getPos().getCoarseValue())) {
+                    IndexWord iw = dictionary.lookupIndexWord(POS.VERB, token.getText());
+                    if (iw != null && iw.getSenses().size() > 0) {
+                        for (Synset synset : iw.getSenses()) {
+                            return "verb.cognition".equalsIgnoreCase(synset.getLexFileName());
+                        }
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            } else if ("it".equalsIgnoreCase(token.getText())) {
+                foundIt = true;
+            }
+        }
+
         return false;
     }
 }
