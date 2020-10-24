@@ -179,12 +179,12 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
         int precedingTokensSize = precedingTokens.size();
         int followingTokensSize = followingTokens.size();
 
-        for (int i = 0; i < 4; i++) {
-            if (i < precedingTokensSize) {
+        for (int i = 3; i >= 0; i--) {
+            if (precedingTokensSize <= i) {
+                fourPosTagsBeforeAfter.append(abs);
+            } else {
                 Token t = precedingTokens.get(precedingTokensSize - i - 1);
                 fourPosTagsBeforeAfter.append(t.getPos().getCoarseValue());
-            } else {
-                fourPosTagsBeforeAfter.append(abs);
             }
             fourPosTagsBeforeAfter.append(separator);
         }
@@ -196,9 +196,7 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
             } else {
                 fourPosTagsBeforeAfter.append(abs);
             }
-            if (i != 3) {
-                fourPosTagsBeforeAfter.append(separator);
-            }
+            if (i != 3) fourPosTagsBeforeAfter.append(separator);
         }
 
         return fourPosTagsBeforeAfter.toString();
