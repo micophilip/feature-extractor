@@ -3,7 +3,6 @@ package ca.uottawa.csi5137.io;
 import ca.uottawa.csi5137.type.Features;
 import de.tudarmstadt.ukp.dkpro.core.api.metadata.type.DocumentMetaData;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
-import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.jcas.JCas;
@@ -36,7 +35,9 @@ public class FeatureMatrixWriter extends JCasConsumer_ImplBase {
     @Override
     public void process(JCas aJCas) throws AnalysisEngineProcessException {
         DocumentMetaData metadata = DocumentMetaData.get(aJCas);
-        String cls = metadata.getDocumentTitle().substring(0, metadata.getDocumentTitle().indexOf(".")).toUpperCase();
+        /* Required for assignment 3:
+         * String cls = metadata.getDocumentTitle().substring(0, metadata.getDocumentTitle().indexOf(".")).toUpperCase();
+         */
 
         for (Sentence sentence : select(aJCas, Sentence.class)) {
             for (Features feature : selectCovered(Features.class, sentence)) {
@@ -49,8 +50,8 @@ public class FeatureMatrixWriter extends JCasConsumer_ImplBase {
                         + feature.getFollowedByAdj() + "," + feature.getFollowedByNPAdj() + ","
                         + feature.getNumTokensPrecedingFollowingInfinitiveVerb() + "," + feature.getNumTokensUntilNextPrep() + ","
                         + feature.getFollowedBySeqAdjNP() + "," + feature.getDepRelType() + ","
-                        + feature.getNextFollowingVerbInWeather() + "," + feature.getNextFollowingVerbInCognition() + ",");
-                featureMatrix.append(cls + "\n");
+                        + feature.getNextFollowingVerbInWeather() + "," + feature.getNextFollowingVerbInCognition());
+                featureMatrix.append("\n");
             }
         }
     }
@@ -62,7 +63,7 @@ public class FeatureMatrixWriter extends JCasConsumer_ImplBase {
      */
     public void writeToFile(String content) {
         StringBuilder header = new StringBuilder();
-        header.append("position,sentLenInTokens,numPunct,numPrecedingNP,numFollowingNP,followsPrepPhrase,fourPosTagsPrecedingFollowing,followedByVBG,followedByPrep,numFollowingAdj,followsVerb,followedByVerb,followedByAdj,followedByNPAdj,numTokensPrecedingFollowingInfinitiveVerb,numTokensUntilNextPrep,followedBySeqAdjNP,depRelType,nextFollowingVerbInWeather,nextFollowingVerbInCognition,class");
+        header.append("position,sentLenInTokens,numPunct,numPrecedingNP,numFollowingNP,followsPrepPhrase,fourPosTagsPrecedingFollowing,followedByVBG,followedByPrep,numFollowingAdj,followsVerb,followedByVerb,followedByAdj,followedByNPAdj,numTokensPrecedingFollowingInfinitiveVerb,numTokensUntilNextPrep,followedBySeqAdjNP,depRelType,nextFollowingVerbInWeather,nextFollowingVerbInCognition");
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path + "output.csv"))) {
             writer.write(header.toString());
@@ -75,7 +76,7 @@ public class FeatureMatrixWriter extends JCasConsumer_ImplBase {
 
     @Override
     public void collectionProcessComplete() {
-        String data = featureMatrix.toString().replaceAll("true", "1").replaceAll("false", "0");
+        String data = featureMatrix.toString();
 
         writeToFile(data);
 
