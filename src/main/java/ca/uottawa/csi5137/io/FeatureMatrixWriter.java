@@ -3,6 +3,7 @@ package ca.uottawa.csi5137.io;
 import ca.uottawa.csi5137.type.Features;
 import de.tudarmstadt.ukp.dkpro.core.api.metadata.type.DocumentMetaData;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
+import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.jcas.JCas;
@@ -49,8 +50,8 @@ public class FeatureMatrixWriter extends JCasConsumer_ImplBase {
                         + feature.getNumTokensPrecedingFollowingInfinitiveVerb() + "," + feature.getNumTokensUntilNextPrep() + ","
                         + feature.getFollowedBySeqAdjNP() + "," + feature.getDepRelType() + ","
                         + feature.getNextFollowingVerbInWeather() + "," + feature.getNextFollowingVerbInCognition() + ",");
+                featureMatrix.append(cls + "\n");
             }
-            featureMatrix.append(cls + "\n");
         }
     }
 
