@@ -103,7 +103,8 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
         Sentence chunked = new Sentence(aJCas, sentenceBegin, positionOfIt);
 
         for (Chunk chunk : selectCovered(Chunk.class, chunked)) {
-            if ("NP".equalsIgnoreCase(chunk.getChunkValue())) {
+            // Check for NC - Non-recursive noun phrase (atomic) as per assignment requirement
+            if ("NC".equalsIgnoreCase(chunk.getType().getShortName())) {
                 precedingNPs++;
             }
         }
@@ -124,7 +125,8 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
         Sentence chunked = new Sentence(aJCas, positionOfIt, sentenceEnd);
 
         for (Chunk chunk : selectCovered(Chunk.class, chunked)) {
-            if ("NP".equalsIgnoreCase(chunk.getChunkValue())) {
+            // Check for NC - Non-recursive noun phrase (atomic) as per assignment requirement
+            if ("NC".equalsIgnoreCase(chunk.getType().getShortName())) {
                 followingNPs++;
             }
         }
