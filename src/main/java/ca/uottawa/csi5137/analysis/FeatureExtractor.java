@@ -215,35 +215,31 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
     public boolean getFollowedByVBG(Sentence sentence, int tokenBegin) {
 
         boolean foundIt = false;
-        boolean followedByVBG = false;
 
         for (Token token : selectCovered(Token.class, sentence)) {
-            if (foundIt) {
-                followedByVBG = "VBG".equalsIgnoreCase(token.getPosValue());
-                break;
+            if (foundIt && "VBG".equalsIgnoreCase(token.getPosValue())) {
+                return true;
             }
             if ("it".equalsIgnoreCase(token.getText()) && token.getBegin() == tokenBegin) {
                 foundIt = true;
             }
         }
-        return followedByVBG;
+        return false;
     }
 
     public boolean getFollowedByPrep(Sentence sentence, int tokenBegin) {
         boolean foundIt = false;
-        boolean followedByPrep = false;
 
         for (Token token : selectCovered(Token.class, sentence)) {
-            if (foundIt) {
-                followedByPrep = "IN".equalsIgnoreCase(token.getPosValue());
-                break;
+            if (foundIt && "IN".equalsIgnoreCase(token.getPosValue())) {
+                return true;
             }
             if ("it".equalsIgnoreCase(token.getText()) && token.getBegin() == tokenBegin) {
                 foundIt = true;
             }
         }
 
-        return followedByPrep;
+        return false;
     }
 
     public int getNumFollowingAdj(Sentence sentence, int tokenBegin) {
@@ -264,61 +260,55 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     public boolean getFollowsVerb(Sentence sentence, int tokenBegin) {
         boolean foundIt = false;
-        boolean followsVerb = false;
-        Token previousToken = null;
+        boolean foundAVerb = false;
 
         for (Token token : selectCovered(Token.class, sentence)) {
             if (!foundIt && "it".equalsIgnoreCase(token.getText()) && token.getBegin() == tokenBegin) {
                 foundIt = true;
             }
 
-            if (foundIt && previousToken != null) {
-                followsVerb = "VERB".equalsIgnoreCase(previousToken.getPos().getCoarseValue());
-                break;
+            if (foundAVerb && foundIt) return true;
+
+            if (!foundIt && !foundAVerb) {
+                foundAVerb = "VERB".equalsIgnoreCase(token.getPos().getCoarseValue());
             }
 
-            previousToken = token;
         }
-        return followsVerb;
+        return false;
     }
 
     public boolean getFollowedByVerb(Sentence sentence, int tokenBegin) {
         boolean foundIt = false;
-        boolean followedByVerb = false;
 
         for (Token token : selectCovered(Token.class, sentence)) {
-            if (foundIt) {
-                followedByVerb = "VERB".equalsIgnoreCase(token.getPos().getCoarseValue());
-                break;
+            if (foundIt && "VERB".equalsIgnoreCase(token.getPos().getCoarseValue())) {
+                return true;
             }
             if ("it".equalsIgnoreCase(token.getText()) && token.getBegin() == tokenBegin) {
                 foundIt = true;
             }
         }
 
-        return followedByVerb;
+        return false;
     }
 
     public boolean getFollowedByAdj(Sentence sentence, int tokenBegin) {
         boolean foundIt = false;
-        boolean followedByAdj = false;
 
         for (Token token : selectCovered(Token.class, sentence)) {
-            if (foundIt) {
-                followedByAdj = "JJ".equalsIgnoreCase(token.getPosValue());
-                break;
+            if (foundIt && "JJ".equalsIgnoreCase(token.getPosValue())) {
+                return true;
             }
             if ("it".equalsIgnoreCase(token.getText()) && token.getBegin() == tokenBegin) {
                 foundIt = true;
             }
         }
 
-        return followedByAdj;
+        return false;
     }
 
     public boolean getFollowedByNPAdj(Sentence sentence, JCas aJCas, int tokenBegin) {
         int positionOfIt = 0;
-        boolean npContainsAdj = false;
 
         for (Token token : selectCovered(Token.class, sentence)) {
             if ("it".equalsIgnoreCase(token.getText()) && token.getBegin() == tokenBegin) {
@@ -329,20 +319,19 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
         Sentence chunked = new Sentence(aJCas, positionOfIt, sentence.getEnd());
         List<Chunk> chunks = selectCovered(Chunk.class, chunked);
-        if (chunks.size() > 0) {
-            Chunk firstChunk = chunks.get(0);
-            if ("NP".equalsIgnoreCase(firstChunk.getChunkValue())) {
-                Sentence tokenizedChunk = new Sentence(aJCas, firstChunk.getBegin(), firstChunk.getEnd());
+
+        for (Chunk chunk : chunks) {
+            if ("NP".equalsIgnoreCase(chunk.getChunkValue())) {
+                Sentence tokenizedChunk = new Sentence(aJCas, chunk.getBegin(), chunk.getEnd());
                 for (Token tokenInNP : selectCovered(Token.class, tokenizedChunk)) {
                     if ("JJ".equalsIgnoreCase(tokenInNP.getPosValue())) {
-                        npContainsAdj = true;
-                        break;
+                        return true;
                     }
                 }
             }
         }
 
-        return npContainsAdj;
+        return false;
     }
 
     public int getNumTokensPrecedingFollowingInfinitiveVerb(Sentence sentence, int tokenBegin) {
@@ -405,21 +394,19 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     public boolean getFollowedBySeqAdjNP(Sentence sentence, JCas aJCas, int tokenBegin) {
 
-        int positionOfAdj = 0;
+        int positionOfAdj = -1;
         boolean foundIt = false;
 
         for (Token token : selectCovered(Token.class, sentence)) {
-            if (foundIt) {
-                if ("JJ".equalsIgnoreCase(token.getPosValue())) {
-                    positionOfAdj = token.getEnd();
-                    break;
-                } else {
-                    return false;
-                }
+            if (foundIt && "JJ".equalsIgnoreCase(token.getPosValue())) {
+                positionOfAdj = token.getEnd();
+                break;
             } else if ("it".equalsIgnoreCase(token.getText()) && token.getBegin() == tokenBegin) {
                 foundIt = true;
             }
         }
+
+        if (positionOfAdj < 0) return false;    // No adjective found following 'it'
 
         Sentence chunked = new Sentence(aJCas, positionOfAdj, sentence.getEnd());
 
