@@ -81,11 +81,19 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     public int getNumPunct(Sentence sentence) {
         int punctuationMarks = 0;
-        for (Token token : selectCovered(Token.class, sentence)) {
-            if ("PUNCT".equalsIgnoreCase(token.getPos().getCoarseValue())) {
+        List<Token> tokens = selectCovered(Token.class, sentence);
+        for (int i = 0; i < tokens.size(); i++) {
+            Token token = tokens.get(i);
+            Token previousToken = (i - 1) >= 0 ? tokens.get(i - 1) : null;
+            Token priorToken = (i - 2) >= 0 ? tokens.get(i - 2) : null;
+            if (".".equalsIgnoreCase(token.getText()) && previousToken != null && priorToken != null
+                    && ".".equalsIgnoreCase(previousToken.getText()) && ".".equalsIgnoreCase(priorToken.getText())) {
+                punctuationMarks--;  // Handle ellipsis as one punctuation mark according to Prof's post on Piazza
+            } else if ("PUNCT".equalsIgnoreCase(token.getPos().getCoarseValue())) {
                 punctuationMarks++;
             }
         }
+
         return punctuationMarks;
     }
 
