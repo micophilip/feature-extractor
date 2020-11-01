@@ -339,26 +339,22 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
         boolean foundIt = false;
         int tokensTillInfinitiveVerb = 0;
         boolean foundInfinitiveVerb = false;
-        boolean foundTo = false;
 
-        for (Token token : selectCovered(Token.class, sentence)) {
-            if (foundIt) {
-                tokensTillInfinitiveVerb++;
-                if ("TO".equalsIgnoreCase(token.getPosValue())) {
-                    foundTo = true;
-                    continue;
-                }
-            }
+        List<Token> tokens = selectCovered(Token.class, sentence);
 
-            if (foundTo) {
-                if ("VB".equalsIgnoreCase(token.getPosValue())) {
-                    foundInfinitiveVerb = true;
-                    break;
-                }
-            }
-
-            if (!foundIt && "it".equalsIgnoreCase(token.getText()) && token.getBegin() == tokenBegin) {
+        for (int i = 0; i < tokens.size(); i++) {
+            if ("it".equalsIgnoreCase(tokens.get(i).getText()) && tokens.get(i).getBegin() == tokenBegin) {
                 foundIt = true;
+            }
+
+            if (foundIt) {
+                if ("VB".equalsIgnoreCase(tokens.get(i).getPosValue())) {
+                    if (i - 1 >= 0 && "TO".equalsIgnoreCase(tokens.get(i - 1).getPosValue())) {
+                        foundInfinitiveVerb = true;
+                        break;
+                    }
+                }
+                tokensTillInfinitiveVerb++;
             }
         }
 
