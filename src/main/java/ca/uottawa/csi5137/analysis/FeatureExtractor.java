@@ -438,7 +438,9 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
                     IndexWord iw = dictionary.lookupIndexWord(POS.VERB, token.getText());
                     if (iw != null && iw.getSenses().size() > 0) {
                         for (Synset synset : iw.getSenses()) {
-                            return "verb.weather".equalsIgnoreCase(synset.getLexFileName());
+                            if ("verb.weather".equalsIgnoreCase(synset.getLexFileName())) {
+                                return true;
+                            }
                         }
                     } else {
                         return false;
@@ -465,7 +467,9 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
                     IndexWord iw = dictionary.lookupIndexWord(POS.VERB, token.getText());
                     if (iw != null && iw.getSenses().size() > 0) {
                         for (Synset synset : iw.getSenses()) {
-                            return "verb.cognition".equalsIgnoreCase(synset.getLexFileName());
+                            if ("verb.cognition".equalsIgnoreCase(synset.getLexFileName())) {
+                                return true;
+                            }
                         }
                     } else {
                         return false;
