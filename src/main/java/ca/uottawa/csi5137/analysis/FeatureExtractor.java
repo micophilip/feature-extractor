@@ -417,13 +417,19 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
     }
 
     public String getDepRelType(Sentence sentence, int tokenBegin) {
+        String result = "ABS";
+        int closestSoFar = Integer.MAX_VALUE;
         for (Dependency dependency : selectCovered(Dependency.class, sentence)) {
             if ("it".equalsIgnoreCase(dependency.getDependent().getText()) && dependency.getDependent().getBegin() == tokenBegin) {
-                return dependency.getDependencyType();
+                int distance = Math.abs(dependency.getDependent().getBegin() - dependency.getGovernor().getBegin());
+                if (distance < closestSoFar) {
+                    result = dependency.getDependencyType();
+                    closestSoFar = distance;
+                }
             }
         }
 
-        return "ABS";
+        return result;
     }
 
     public boolean getNextFollowingVerbInWeather(Sentence sentence, int tokenBegin) throws JWNLException {
