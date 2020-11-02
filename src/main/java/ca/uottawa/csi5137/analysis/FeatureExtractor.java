@@ -63,6 +63,12 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     }
 
+    /**
+     * F1
+     * @param sentence
+     * @param tokenBegin
+     * @return
+     */
     public int getPosition(Sentence sentence, int tokenBegin) {
         int position = 1;
         for (Token token : selectCovered(Token.class, sentence)) {
@@ -75,10 +81,20 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
         return -1;
     }
 
+    /**
+     * F2
+     * @param sentence
+     * @return
+     */
     public int getSentLenInTokens(Sentence sentence) {
         return selectCovered(Token.class, sentence).size();
     }
 
+    /**
+     * F3
+     * @param sentence
+     * @return
+     */
     public int getNumPunct(Sentence sentence) {
         int punctuationMarks = 0;
         List<Token> tokens = selectCovered(Token.class, sentence);
@@ -97,6 +113,13 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
         return punctuationMarks;
     }
 
+    /**
+     * F4
+     * @param sentence
+     * @param aJCas
+     * @param tokenBegin
+     * @return
+     */
     public int getNumPrecedingNP(Sentence sentence, JCas aJCas, int tokenBegin) {
         int positionOfIt = 0;
         int precedingNPs = 0;
@@ -119,6 +142,13 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
         return precedingNPs;
     }
 
+    /**
+     * F5
+     * @param sentence
+     * @param aJCas
+     * @param tokenEnd
+     * @return
+     */
     public int getNumFollowingNP(Sentence sentence, JCas aJCas, int tokenEnd) {
         int positionOfIt = 0;
         int followingNPs = 0;
@@ -141,6 +171,13 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
         return followingNPs;
     }
 
+    /**
+     * F6
+     * @param sentence
+     * @param aJCas
+     * @param tokenBegin
+     * @return
+     */
     public boolean getFollowsPrepPhrase(Sentence sentence, JCas aJCas, int tokenBegin) {
         int positionOfIt = 0;
         int sentenceBegin = sentence.getBegin();
@@ -167,6 +204,13 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
         }
     }
 
+    /**
+     * F7
+     * @param sentence
+     * @param aJCas
+     * @param tokenBegin
+     * @return
+     */
     public String getFourPosTagsPrecedingFollowing(Sentence sentence, JCas aJCas, int tokenBegin) {
         int beginIt = 0;
         int endIt = 0;
@@ -212,6 +256,12 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
         return fourPosTagsBeforeAfter.toString();
     }
 
+    /**
+     * F8
+     * @param sentence
+     * @param tokenBegin
+     * @return
+     */
     public boolean getFollowedByVBG(Sentence sentence, int tokenBegin) {
 
         boolean foundIt = false;
@@ -227,6 +277,12 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
         return false;
     }
 
+    /**
+     * F9
+     * @param sentence
+     * @param tokenBegin
+     * @return
+     */
     public boolean getFollowedByPrep(Sentence sentence, int tokenBegin) {
         boolean foundIt = false;
 
@@ -242,6 +298,12 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
         return false;
     }
 
+    /**
+     * F10
+     * @param sentence
+     * @param tokenBegin
+     * @return
+     */
     public int getNumFollowingAdj(Sentence sentence, int tokenBegin) {
         boolean foundIt = false;
         int numFollowingAdj = 0;
@@ -258,6 +320,12 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
         return numFollowingAdj;
     }
 
+    /**
+     * F11
+     * @param sentence
+     * @param tokenBegin
+     * @return
+     */
     public boolean getFollowsVerb(Sentence sentence, int tokenBegin) {
         boolean foundIt = false;
         boolean foundAVerb = false;
@@ -277,6 +345,12 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
         return false;
     }
 
+    /**
+     * F12
+     * @param sentence
+     * @param tokenBegin
+     * @return
+     */
     public boolean getFollowedByVerb(Sentence sentence, int tokenBegin) {
         boolean foundIt = false;
 
@@ -292,6 +366,12 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
         return false;
     }
 
+    /**
+     * F13
+     * @param sentence
+     * @param tokenBegin
+     * @return
+     */
     public boolean getFollowedByAdj(Sentence sentence, int tokenBegin) {
         boolean foundIt = false;
 
@@ -307,6 +387,13 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
         return false;
     }
 
+    /**
+     * F14
+     * @param sentence
+     * @param aJCas
+     * @param tokenBegin
+     * @return
+     */
     public boolean getFollowedByNPAdj(Sentence sentence, JCas aJCas, int tokenBegin) {
         int positionOfIt = 0;
 
@@ -334,6 +421,12 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
         return false;
     }
 
+    /**
+     * F15
+     * @param sentence
+     * @param tokenBegin
+     * @return
+     */
     public int getNumTokensPrecedingFollowingInfinitiveVerb(Sentence sentence, int tokenBegin) {
 
         boolean foundIt = false;
@@ -363,6 +456,12 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     }
 
+    /**
+     * F16
+     * @param sentence
+     * @param tokenBegin
+     * @return
+     */
     public int getNumTokensUntilNextPrep(Sentence sentence, int tokenBegin) {
         boolean foundIt = false;
         int tokensUntilNextPrep = 0;
@@ -388,6 +487,13 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
         else return 0;
     }
 
+    /**
+     * F17
+     * @param sentence
+     * @param aJCas
+     * @param tokenBegin
+     * @return
+     */
     public boolean getFollowedBySeqAdjNP(Sentence sentence, JCas aJCas, int tokenBegin) {
 
         int positionOfAdj = -1;
@@ -416,6 +522,12 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     }
 
+    /**
+     * F18
+     * @param sentence
+     * @param tokenBegin
+     * @return
+     */
     public String getDepRelType(Sentence sentence, int tokenBegin) {
         String result = "ABS";
         int closestSoFar = Integer.MAX_VALUE;
@@ -432,6 +544,13 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
         return result;
     }
 
+    /**
+     * F19
+     * @param sentence
+     * @param tokenBegin
+     * @return
+     * @throws JWNLException
+     */
     public boolean getNextFollowingVerbInWeather(Sentence sentence, int tokenBegin) throws JWNLException {
 
         boolean foundIt = false;
@@ -462,6 +581,13 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
         return false;
     }
 
+    /**
+     * F20
+     * @param sentence
+     * @param tokenBegin
+     * @return
+     * @throws JWNLException
+     */
     public boolean getNextFollowingVerbInCognition(Sentence sentence, int tokenBegin) throws JWNLException {
         boolean foundIt = false;
         Dictionary dictionary = Dictionary.getDefaultResourceInstance();
