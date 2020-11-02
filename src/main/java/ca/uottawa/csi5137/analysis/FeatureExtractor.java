@@ -441,13 +441,13 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
             }
 
             if (foundIt) {
+                tokensTillInfinitiveVerb++;
                 if ("VB".equalsIgnoreCase(tokens.get(i).getPosValue())) {
                     if (i - 1 >= 0 && "TO".equalsIgnoreCase(tokens.get(i - 1).getPosValue())) {
                         foundInfinitiveVerb = true;
                         break;
                     }
                 }
-                tokensTillInfinitiveVerb++;
             }
         }
 
@@ -470,11 +470,11 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
         for (Token token : selectCovered(Token.class, sentence)) {
 
             if (foundIt) {
+                tokensUntilNextPrep++;
                 if ("IN".equalsIgnoreCase(token.getPosValue())) {
                     foundPrep = true;
                     break;
                 }
-                tokensUntilNextPrep++;
             }
 
 
