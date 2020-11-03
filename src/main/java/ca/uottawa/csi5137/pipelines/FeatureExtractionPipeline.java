@@ -20,7 +20,7 @@ import static org.uimafit.factory.AnalysisEngineFactory.createPrimitiveDescripti
 
 public class FeatureExtractionPipeline {
 
-    static String PATH = "src/main/resources/input/";
+    static String PATH = "src/main/resources/io/";
 
     public static void main(String[] args) throws IOException, UIMAException {
 
