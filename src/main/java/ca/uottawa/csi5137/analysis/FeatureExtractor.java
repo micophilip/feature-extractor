@@ -37,21 +37,21 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
                     features.setNumPrecedingNP(getNumPrecedingNP(sentence, aJCas, token.getBegin()));
                     features.setNumFollowingNP(getNumFollowingNP(sentence, aJCas, token.getEnd()));
                     features.setFollowsPrepPhrase(getFollowsPrepPhrase(sentence, aJCas, token.getBegin()));
-                    features.setFourPosTagsPrecedingFollowing(getFourPosTagsPrecedingFollowing(sentence, aJCas, token.getBegin()));
-                    features.setFollowedByVBG(getFollowedByVBG(sentence, token.getBegin()));
-                    features.setFollowedByPrep(getFollowedByPrep(sentence, token.getBegin()));
-                    features.setNumFollowingAdj(getNumFollowingAdj(sentence, token.getBegin()));
-                    features.setFollowsVerb(getFollowsVerb(sentence, token.getBegin()));
-                    features.setFollowedByVerb(getFollowedByVerb(sentence, token.getBegin()));
-                    features.setFollowedByAdj(getFollowedByAdj(sentence, token.getBegin()));
-                    features.setFollowedByNPAdj(getFollowedByNPAdj(sentence, aJCas, token.getBegin()));
-                    features.setNumTokensPrecedingFollowingInfinitiveVerb(getNumTokensPrecedingFollowingInfinitiveVerb(sentence, token.getBegin()));
-                    features.setNumTokensUntilNextPrep(getNumTokensUntilNextPrep(sentence, token.getBegin()));
-                    features.setFollowedBySeqAdjNP(getFollowedBySeqAdjNP(sentence, aJCas, token.getBegin()));
+                    features.setFourPosTagsPrecedingFollowing(getFourPosTagsPrecedingFollowing(sentence, aJCas, token.getBegin(), token.getEnd()));
+                    features.setFollowedByVBG(getFollowedByVBG(sentence, aJCas, token.getEnd()));
+                    features.setFollowedByPrep(getFollowedByPrep(sentence, aJCas, token.getEnd()));
+                    features.setNumFollowingAdj(getNumFollowingAdj(sentence, aJCas, token.getEnd()));
+                    features.setFollowsVerb(getFollowsVerb(sentence, aJCas, token.getBegin()));
+                    features.setFollowedByVerb(getFollowedByVerb(sentence, aJCas, token.getEnd()));
+                    features.setFollowedByAdj(getFollowedByAdj(sentence, aJCas, token.getEnd()));
+                    features.setFollowedByNPAdj(getFollowedByNPAdj(sentence, aJCas, token.getEnd()));
+                    features.setNumTokensPrecedingFollowingInfinitiveVerb(getNumTokensPrecedingFollowingInfinitiveVerb(sentence, aJCas, token.getEnd()));
+                    features.setNumTokensUntilNextPrep(getNumTokensUntilNextPrep(sentence, aJCas, token.getEnd()));
+                    features.setFollowedBySeqAdjNP(getFollowedBySeqAdjNP(sentence, aJCas, token.getEnd()));
                     features.setDepRelType(getDepRelType(sentence, token.getBegin()));
                     try {
-                        features.setNextFollowingVerbInWeather(getNextFollowingVerbInWeather(sentence, token.getBegin()));
-                        features.setNextFollowingVerbInCognition(getNextFollowingVerbInCognition(sentence, token.getBegin()));
+                        features.setNextFollowingVerbInWeather(getNextFollowingVerbInWeather(sentence, aJCas, token.getEnd()));
+                        features.setNextFollowingVerbInCognition(getNextFollowingVerbInCognition(sentence, aJCas, token.getEnd()));
                     } catch (JWNLException e) {
                         e.printStackTrace();
                     }
@@ -65,6 +65,7 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     /**
      * F1
+     *
      * @param sentence
      * @param tokenBegin
      * @return
@@ -83,6 +84,7 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     /**
      * F2
+     *
      * @param sentence
      * @return
      */
@@ -92,6 +94,7 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     /**
      * F3
+     *
      * @param sentence
      * @return
      */
@@ -115,21 +118,15 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     /**
      * F4
+     *
      * @param sentence
      * @param aJCas
-     * @param tokenBegin
+     * @param positionOfIt
      * @return
      */
-    public int getNumPrecedingNP(Sentence sentence, JCas aJCas, int tokenBegin) {
-        int positionOfIt = 0;
+    public int getNumPrecedingNP(Sentence sentence, JCas aJCas, int positionOfIt) {
         int precedingNPs = 0;
         int sentenceBegin = sentence.getBegin();
-        for (Token token : selectCovered(Token.class, sentence)) {
-            if ("it".equalsIgnoreCase(token.getText()) && token.getBegin() == tokenBegin) {
-                positionOfIt = token.getBegin();
-                break;
-            }
-        }
 
         Sentence chunked = new Sentence(aJCas, sentenceBegin, positionOfIt);
 
@@ -144,21 +141,15 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     /**
      * F5
+     *
      * @param sentence
      * @param aJCas
-     * @param tokenEnd
+     * @param positionOfIt
      * @return
      */
-    public int getNumFollowingNP(Sentence sentence, JCas aJCas, int tokenEnd) {
-        int positionOfIt = 0;
+    public int getNumFollowingNP(Sentence sentence, JCas aJCas, int positionOfIt) {
         int followingNPs = 0;
         int sentenceEnd = sentence.getEnd();
-        for (Token token : selectCovered(Token.class, sentence)) {
-            if ("it".equalsIgnoreCase(token.getText()) && token.getEnd() == tokenEnd) {
-                positionOfIt = token.getEnd();
-                break;
-            }
-        }
 
         Sentence chunked = new Sentence(aJCas, positionOfIt, sentenceEnd);
 
@@ -173,21 +164,14 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     /**
      * F6
+     *
      * @param sentence
      * @param aJCas
-     * @param tokenBegin
+     * @param positionOfIt
      * @return
      */
-    public boolean getFollowsPrepPhrase(Sentence sentence, JCas aJCas, int tokenBegin) {
-        int positionOfIt = 0;
+    public boolean getFollowsPrepPhrase(Sentence sentence, JCas aJCas, int positionOfIt) {
         int sentenceBegin = sentence.getBegin();
-
-        for (Token token : selectCovered(Token.class, sentence)) {
-            if ("it".equalsIgnoreCase(token.getText()) && token.getBegin() == tokenBegin) {
-                positionOfIt = token.getBegin();
-                break;
-            }
-        }
 
         // 'it' is the first token in the sentence
         if (sentenceBegin == positionOfIt) {
@@ -206,25 +190,17 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     /**
      * F7
+     *
      * @param sentence
      * @param aJCas
-     * @param tokenBegin
+     * @param beginIt
+     * @param endIt
      * @return
      */
-    public String getFourPosTagsPrecedingFollowing(Sentence sentence, JCas aJCas, int tokenBegin) {
-        int beginIt = 0;
-        int endIt = 0;
+    public String getFourPosTagsPrecedingFollowing(Sentence sentence, JCas aJCas, int beginIt, int endIt) {
         StringBuilder fourPosTagsBeforeAfter = new StringBuilder();
         String separator = "-";
         String abs = "ABS";
-        List<Token> tokens = selectCovered(Token.class, sentence);
-        for (Token token : tokens) {
-            if ("it".equalsIgnoreCase(token.getText()) && token.getBegin() == tokenBegin) {
-                beginIt = token.getBegin();
-                endIt = token.getEnd();
-                break;
-            }
-        }
         Sentence preceding = new Sentence(aJCas, sentence.getBegin(), beginIt);
         Sentence following = new Sentence(aJCas, endIt, sentence.getEnd());
 
@@ -258,20 +234,19 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     /**
      * F8
+     *
      * @param sentence
-     * @param tokenBegin
+     * @param aJCas
+     * @param tokenEnd
      * @return
      */
-    public boolean getFollowedByVBG(Sentence sentence, int tokenBegin) {
+    public boolean getFollowedByVBG(Sentence sentence, JCas aJCas, int tokenEnd) {
 
-        boolean foundIt = false;
+        Sentence followingTokens = new Sentence(aJCas, tokenEnd, sentence.getEnd());
 
-        for (Token token : selectCovered(Token.class, sentence)) {
-            if (foundIt && "VBG".equalsIgnoreCase(token.getPosValue())) {
+        for (Token token : selectCovered(Token.class, followingTokens)) {
+            if ("VBG".equalsIgnoreCase(token.getPosValue())) {
                 return true;
-            }
-            if ("it".equalsIgnoreCase(token.getText()) && token.getBegin() == tokenBegin) {
-                foundIt = true;
             }
         }
         return false;
@@ -279,19 +254,19 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     /**
      * F9
+     *
      * @param sentence
-     * @param tokenBegin
+     * @param aJCas
+     * @param tokenEnd
      * @return
      */
-    public boolean getFollowedByPrep(Sentence sentence, int tokenBegin) {
-        boolean foundIt = false;
+    public boolean getFollowedByPrep(Sentence sentence, JCas aJCas, int tokenEnd) {
 
-        for (Token token : selectCovered(Token.class, sentence)) {
-            if (foundIt && "IN".equalsIgnoreCase(token.getPosValue())) {
+        Sentence followingTokens = new Sentence(aJCas, tokenEnd, sentence.getEnd());
+
+        for (Token token : selectCovered(Token.class, followingTokens)) {
+            if ("IN".equalsIgnoreCase(token.getPosValue())) {
                 return true;
-            }
-            if ("it".equalsIgnoreCase(token.getText()) && token.getBegin() == tokenBegin) {
-                foundIt = true;
             }
         }
 
@@ -300,20 +275,20 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     /**
      * F10
+     *
      * @param sentence
-     * @param tokenBegin
+     * @param aJCas
+     * @param tokenEnd
      * @return
      */
-    public int getNumFollowingAdj(Sentence sentence, int tokenBegin) {
-        boolean foundIt = false;
+    public int getNumFollowingAdj(Sentence sentence, JCas aJCas, int tokenEnd) {
         int numFollowingAdj = 0;
 
-        for (Token token : selectCovered(Token.class, sentence)) {
-            if (foundIt && "JJ".equalsIgnoreCase(token.getPosValue())) {
+        Sentence followingTokens = new Sentence(aJCas, tokenEnd, sentence.getEnd());
+
+        for (Token token : selectCovered(Token.class, followingTokens)) {
+            if ("JJ".equalsIgnoreCase(token.getPosValue())) {
                 numFollowingAdj++;
-            }
-            if ("it".equalsIgnoreCase(token.getText()) && token.getBegin() == tokenBegin) {
-                foundIt = true;
             }
         }
 
@@ -322,44 +297,39 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     /**
      * F11
+     *
      * @param sentence
+     * @param aJCas
      * @param tokenBegin
      * @return
      */
-    public boolean getFollowsVerb(Sentence sentence, int tokenBegin) {
-        boolean foundIt = false;
-        boolean foundAVerb = false;
+    public boolean getFollowsVerb(Sentence sentence, JCas aJCas, int tokenBegin) {
 
-        for (Token token : selectCovered(Token.class, sentence)) {
-            if (!foundIt && "it".equalsIgnoreCase(token.getText()) && token.getBegin() == tokenBegin) {
-                foundIt = true;
+        Sentence precedingTokens = new Sentence(aJCas, sentence.getBegin(), tokenBegin);
+
+        for (Token token : selectCovered(Token.class, precedingTokens)) {
+            if ("VERB".equalsIgnoreCase(token.getPos().getCoarseValue())) {
+                return true;
             }
-
-            if (foundAVerb && foundIt) return true;
-
-            if (!foundIt && !foundAVerb) {
-                foundAVerb = "VERB".equalsIgnoreCase(token.getPos().getCoarseValue());
-            }
-
         }
         return false;
     }
 
     /**
      * F12
+     *
      * @param sentence
-     * @param tokenBegin
+     * @param aJCas
+     * @param tokenEnd
      * @return
      */
-    public boolean getFollowedByVerb(Sentence sentence, int tokenBegin) {
-        boolean foundIt = false;
+    public boolean getFollowedByVerb(Sentence sentence, JCas aJCas, int tokenEnd) {
 
-        for (Token token : selectCovered(Token.class, sentence)) {
-            if (foundIt && "VERB".equalsIgnoreCase(token.getPos().getCoarseValue())) {
+        Sentence followingTokens = new Sentence(aJCas, tokenEnd, sentence.getEnd());
+
+        for (Token token : selectCovered(Token.class, followingTokens)) {
+            if ("VERB".equalsIgnoreCase(token.getPos().getCoarseValue())) {
                 return true;
-            }
-            if ("it".equalsIgnoreCase(token.getText()) && token.getBegin() == tokenBegin) {
-                foundIt = true;
             }
         }
 
@@ -368,19 +338,19 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     /**
      * F13
+     *
      * @param sentence
-     * @param tokenBegin
+     * @param aJCas
+     * @param tokenEnd
      * @return
      */
-    public boolean getFollowedByAdj(Sentence sentence, int tokenBegin) {
-        boolean foundIt = false;
+    public boolean getFollowedByAdj(Sentence sentence, JCas aJCas, int tokenEnd) {
 
-        for (Token token : selectCovered(Token.class, sentence)) {
-            if (foundIt && "JJ".equalsIgnoreCase(token.getPosValue())) {
+        Sentence followingTokens = new Sentence(aJCas, tokenEnd, sentence.getEnd());
+
+        for (Token token : selectCovered(Token.class, followingTokens)) {
+            if ("JJ".equalsIgnoreCase(token.getPosValue())) {
                 return true;
-            }
-            if ("it".equalsIgnoreCase(token.getText()) && token.getBegin() == tokenBegin) {
-                foundIt = true;
             }
         }
 
@@ -389,20 +359,13 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     /**
      * F14
+     *
      * @param sentence
      * @param aJCas
-     * @param tokenBegin
+     * @param positionOfIt
      * @return
      */
-    public boolean getFollowedByNPAdj(Sentence sentence, JCas aJCas, int tokenBegin) {
-        int positionOfIt = 0;
-
-        for (Token token : selectCovered(Token.class, sentence)) {
-            if ("it".equalsIgnoreCase(token.getText()) && token.getBegin() == tokenBegin) {
-                positionOfIt = token.getEnd();
-                break;
-            }
-        }
+    public boolean getFollowedByNPAdj(Sentence sentence, JCas aJCas, int positionOfIt) {
 
         Sentence chunked = new Sentence(aJCas, positionOfIt, sentence.getEnd());
         List<Chunk> chunks = selectCovered(Chunk.class, chunked);
@@ -423,63 +386,54 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     /**
      * F15
+     *
      * @param sentence
-     * @param tokenBegin
+     * @param aJCas
+     * @param tokenEnd
      * @return
      */
-    public int getNumTokensPrecedingFollowingInfinitiveVerb(Sentence sentence, int tokenBegin) {
+    public int getNumTokensPrecedingFollowingInfinitiveVerb(Sentence sentence, JCas aJCas, int tokenEnd) {
 
-        boolean foundIt = false;
         int tokensTillInfinitiveVerb = 0;
         boolean foundInfinitiveVerb = false;
 
-        List<Token> tokens = selectCovered(Token.class, sentence);
+        Sentence followingTokens = new Sentence(aJCas, tokenEnd, sentence.getEnd());
+        List<Token> tokens = selectCovered(Token.class, followingTokens);
 
         for (int i = 0; i < tokens.size(); i++) {
-            if ("it".equalsIgnoreCase(tokens.get(i).getText()) && tokens.get(i).getBegin() == tokenBegin) {
-                foundIt = true;
-            }
-
-            if (foundIt) {
-                tokensTillInfinitiveVerb++;
-                if ("VB".equalsIgnoreCase(tokens.get(i).getPosValue())) {
-                    if (i - 1 >= 0 && "TO".equalsIgnoreCase(tokens.get(i - 1).getPosValue())) {
-                        foundInfinitiveVerb = true;
-                        break;
-                    }
+            tokensTillInfinitiveVerb++;
+            if ("VB".equalsIgnoreCase(tokens.get(i).getPosValue())) {
+                if (i - 1 >= 0 && "TO".equalsIgnoreCase(tokens.get(i - 1).getPosValue())) {
+                    foundInfinitiveVerb = true;
+                    break;
                 }
             }
         }
 
-        if (foundInfinitiveVerb) return tokensTillInfinitiveVerb - 2;   // Do not count the infinitive verb itself
+        if (foundInfinitiveVerb) return tokensTillInfinitiveVerb - 1;   // Do not count the infinitive verb itself
         else return 0;
 
     }
 
     /**
      * F16
+     *
      * @param sentence
-     * @param tokenBegin
+     * @param aJCas
+     * @param tokenEnd
      * @return
      */
-    public int getNumTokensUntilNextPrep(Sentence sentence, int tokenBegin) {
-        boolean foundIt = false;
+    public int getNumTokensUntilNextPrep(Sentence sentence, JCas aJCas, int tokenEnd) {
         int tokensUntilNextPrep = 0;
         boolean foundPrep = false;
 
-        for (Token token : selectCovered(Token.class, sentence)) {
+        Sentence followingTokens = new Sentence(aJCas, tokenEnd, sentence.getEnd());
 
-            if (foundIt) {
-                tokensUntilNextPrep++;
-                if ("IN".equalsIgnoreCase(token.getPosValue())) {
-                    foundPrep = true;
-                    break;
-                }
-            }
-
-
-            if (!foundIt && "it".equalsIgnoreCase(token.getText()) && token.getBegin() == tokenBegin) {
-                foundIt = true;
+        for (Token token : selectCovered(Token.class, followingTokens)) {
+            tokensUntilNextPrep++;
+            if ("IN".equalsIgnoreCase(token.getPosValue())) {
+                foundPrep = true;
+                break;
             }
         }
 
@@ -489,22 +443,21 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     /**
      * F17
+     *
      * @param sentence
      * @param aJCas
-     * @param tokenBegin
+     * @param tokenEnd
      * @return
      */
-    public boolean getFollowedBySeqAdjNP(Sentence sentence, JCas aJCas, int tokenBegin) {
+    public boolean getFollowedBySeqAdjNP(Sentence sentence, JCas aJCas, int tokenEnd) {
 
         int positionOfAdj = -1;
-        boolean foundIt = false;
+        Sentence followingTokens = new Sentence(aJCas, tokenEnd, sentence.getEnd());
 
-        for (Token token : selectCovered(Token.class, sentence)) {
-            if (foundIt && "JJ".equalsIgnoreCase(token.getPosValue())) {
+        for (Token token : selectCovered(Token.class, followingTokens)) {
+            if ("JJ".equalsIgnoreCase(token.getPosValue())) {
                 positionOfAdj = token.getEnd();
                 break;
-            } else if ("it".equalsIgnoreCase(token.getText()) && token.getBegin() == tokenBegin) {
-                foundIt = true;
             }
         }
 
@@ -524,6 +477,7 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     /**
      * F18
+     *
      * @param sentence
      * @param tokenBegin
      * @return
@@ -546,35 +500,37 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     /**
      * F19
+     *
      * @param sentence
-     * @param tokenBegin
+     * @param aJCas
+     * @param tokenEnd
      * @return
      * @throws JWNLException
      */
-    public boolean getNextFollowingVerbInWeather(Sentence sentence, int tokenBegin) throws JWNLException {
+    public boolean getNextFollowingVerbInWeather(Sentence sentence, JCas aJCas, int tokenEnd) throws JWNLException {
 
-        boolean foundIt = false;
         Dictionary dictionary = Dictionary.getDefaultResourceInstance();
 
-        for (Token token : selectCovered(Token.class, sentence)) {
+        Sentence followingSubSentence = new Sentence(aJCas, tokenEnd, sentence.getEnd());
+        List<Token> followingTokens = selectCovered(Token.class, followingSubSentence);
 
-            if (foundIt) {
-                if ("VERB".equalsIgnoreCase(token.getPos().getCoarseValue())) {
-                    IndexWord iw = dictionary.lookupIndexWord(POS.VERB, token.getText());
-                    if (iw != null && iw.getSenses().size() > 0) {
-                        for (Synset synset : iw.getSenses()) {
-                            if ("verb.weather".equalsIgnoreCase(synset.getLexFileName())) {
-                                return true;
-                            }
+        if (followingTokens.size() == 0) {
+            return false;
+        } else {
+            Token firstToken = followingTokens.get(0);
+            if ("VERB".equalsIgnoreCase(firstToken.getPos().getCoarseValue())) {
+                IndexWord iw = dictionary.lookupIndexWord(POS.VERB, firstToken.getText());
+                if (iw != null && iw.getSenses().size() > 0) {
+                    for (Synset synset : iw.getSenses()) {
+                        if ("verb.weather".equalsIgnoreCase(synset.getLexFileName())) {
+                            return true;
                         }
-                    } else {
-                        return false;
                     }
                 } else {
                     return false;
                 }
-            } else if ("it".equalsIgnoreCase(token.getText()) && token.getBegin() == tokenBegin) {
-                foundIt = true;
+            } else {
+                return false;
             }
         }
 
@@ -583,37 +539,41 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
 
     /**
      * F20
+     *
      * @param sentence
-     * @param tokenBegin
+     * @param aJCas
+     * @param tokenEnd
      * @return
      * @throws JWNLException
      */
-    public boolean getNextFollowingVerbInCognition(Sentence sentence, int tokenBegin) throws JWNLException {
-        boolean foundIt = false;
+    public boolean getNextFollowingVerbInCognition(Sentence sentence, JCas aJCas, int tokenEnd) throws JWNLException {
+
         Dictionary dictionary = Dictionary.getDefaultResourceInstance();
 
-        for (Token token : selectCovered(Token.class, sentence)) {
+        Sentence followingSubSentence = new Sentence(aJCas, tokenEnd, sentence.getEnd());
+        List<Token> followingTokens = selectCovered(Token.class, followingSubSentence);
 
-            if (foundIt) {
-                if ("VERB".equalsIgnoreCase(token.getPos().getCoarseValue())) {
-                    IndexWord iw = dictionary.lookupIndexWord(POS.VERB, token.getText());
-                    if (iw != null && iw.getSenses().size() > 0) {
-                        for (Synset synset : iw.getSenses()) {
-                            if ("verb.cognition".equalsIgnoreCase(synset.getLexFileName())) {
-                                return true;
-                            }
+        if (followingTokens.size() == 0) {
+            return false;
+        } else {
+            Token firstToken = followingTokens.get(0);
+            if ("VERB".equalsIgnoreCase(firstToken.getPos().getCoarseValue())) {
+                IndexWord iw = dictionary.lookupIndexWord(POS.VERB, firstToken.getText());
+                if (iw != null && iw.getSenses().size() > 0) {
+                    for (Synset synset : iw.getSenses()) {
+                        if ("verb.cognition".equalsIgnoreCase(synset.getLexFileName())) {
+                            return true;
                         }
-                    } else {
-                        return false;
                     }
                 } else {
                     return false;
                 }
-            } else if ("it".equalsIgnoreCase(token.getText()) && token.getBegin() == tokenBegin) {
-                foundIt = true;
+            } else {
+                return false;
             }
         }
 
         return false;
+
     }
 }
