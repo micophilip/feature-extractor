@@ -63,7 +63,7 @@ public class FeatureMatrixWriter extends JCasConsumer_ImplBase {
      */
     public void writeToFile(String content) {
         StringBuilder header = new StringBuilder();
-        header.append("position,sentLenInTokens,numPunct,numPrecedingNP,numFollowingNP,followsPrepPhrase,fourPosTagsPrecedingFollowing,followedByVBG,followedByPrep,numFollowingAdj,followsVerb,followedByVerb,followedByAdj,followedByNPAdj,numTokensPrecedingFollowingInfinitiveVerb,numTokensUntilNextPrep,followedBySeqAdjNP,depRelType,nextFollowingVerbInWeather,nextFollowingVerbInCognition");
+        header.append("position,sentLenInTokens,numPunct,numPrecedingNP,numFollowingNP,followsPrepPhrase,posTagBefore4,posTagBefore3,posTagBefore2,posTagBefore1,posTagAfter1,posTagAfter2,posTagAfter3,posTagAfter4,followedByVBG,followedByPrep,numFollowingAdj,followsVerb,followedByVerb,followedByAdj,followedByNPAdj,numTokensPrecedingFollowingInfinitiveVerb,numTokensUntilNextPrep,followedBySeqAdjNP,depRelType,nextFollowingVerbInWeather,nextFollowingVerbInCognition");
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path + "output.csv"))) {
             writer.write(header.toString());

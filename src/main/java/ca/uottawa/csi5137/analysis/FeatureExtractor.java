@@ -199,7 +199,7 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
      */
     public String getFourPosTagsPrecedingFollowing(Sentence sentence, JCas aJCas, int beginIt, int endIt) {
         StringBuilder fourPosTagsBeforeAfter = new StringBuilder();
-        String separator = "-";
+        String separator = ",";
         String abs = "ABS";
         Sentence preceding = new Sentence(aJCas, sentence.getBegin(), beginIt);
         Sentence following = new Sentence(aJCas, endIt, sentence.getEnd());
