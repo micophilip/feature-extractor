@@ -451,27 +451,21 @@ public class FeatureExtractor extends JCasAnnotator_ImplBase {
      */
     public boolean getFollowedBySeqAdjNP(Sentence sentence, JCas aJCas, int tokenEnd) {
 
-        int positionOfAdj = -1;
-        Sentence followingTokens = new Sentence(aJCas, tokenEnd, sentence.getEnd());
+        Sentence chunked = new Sentence(aJCas, tokenEnd, sentence.getEnd());
+        List<Chunk> chunks = selectCovered(Chunk.class, chunked);
 
-        for (Token token : selectCovered(Token.class, followingTokens)) {
-            if ("JJ".equalsIgnoreCase(token.getPosValue())) {
-                positionOfAdj = token.getEnd();
-                break;
+        for (Chunk chunk : chunks) {
+            if ("NP".equalsIgnoreCase(chunk.getChunkValue())) {
+                Sentence tokenizedChunk = new Sentence(aJCas, chunk.getBegin(), chunk.getEnd());
+                List<Token> chunkTokens = selectCovered(Token.class, tokenizedChunk);
+                Token firstToken = chunkTokens.get(0);
+                if ("JJ".equalsIgnoreCase(firstToken.getPosValue())) {
+                    return true;
+                }
             }
         }
 
-        if (positionOfAdj < 0) return false;    // No adjective found following 'it'
-
-        Sentence chunked = new Sentence(aJCas, positionOfAdj, sentence.getEnd());
-
-        List<Chunk> followingChunks = selectCovered(Chunk.class, chunked);
-        if (followingChunks.size() == 0) {
-            return false;
-        } else {
-            Chunk followingChunk = followingChunks.get(0);
-            return "NP".equalsIgnoreCase(followingChunk.getChunkValue());
-        }
+        return false;
 
     }
 
