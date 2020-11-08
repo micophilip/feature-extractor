@@ -4,7 +4,7 @@
 
 1. This assignment was built and run using Java&trade; SE Runtime Environment (build 13+33)
 2. Build `pom.xml` using Maven to get all dependencies.
-3. Run `main` function in `src/main/java/ca/uottawa/csi5137/pipelines/FeatureExtractionPipeline.java`
+3. Run `main` function in `src/main/java/ca/uottawa/csi5137b/pipelines/FeatureExtractionPipeline.java`
 4. The output file will be placed in the same `io` folder as `input.txt`.
 
 ## Locations

@@ -1,6 +1,6 @@
 
 /* First created by JCasGen Mon Oct 19 22:33:38 EDT 2020 */
-package ca.uottawa.csi5137.type;
+package ca.uottawa.csi5137b.type;
 
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.JCasRegistry;

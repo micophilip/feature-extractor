@@ -6,7 +6,7 @@
     <vendor/>
     <types>
         <typeDescription>
-            <name>ca.uottawa.csi5137.type.Features</name>
+            <name>ca.uottawa.csi5137b.type.Features</name>
             <description/>
             <supertypeName>uima.tcas.Annotation</supertypeName>
             <features>

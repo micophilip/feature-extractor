@@ -1,6 +1,6 @@
-package ca.uottawa.csi5137.io;
+package ca.uottawa.csi5137b.io;
 
-import ca.uottawa.csi5137.type.Features;
+import ca.uottawa.csi5137b.type.Features;
 import de.tudarmstadt.ukp.dkpro.core.api.metadata.type.DocumentMetaData;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import org.apache.uima.UimaContext;

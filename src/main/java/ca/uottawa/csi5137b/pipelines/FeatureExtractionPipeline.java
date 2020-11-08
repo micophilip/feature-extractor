@@ -1,7 +1,7 @@
-package ca.uottawa.csi5137.pipelines;
+package ca.uottawa.csi5137b.pipelines;
 
-import ca.uottawa.csi5137.analysis.FeatureExtractor;
-import ca.uottawa.csi5137.io.FeatureMatrixWriter;
+import ca.uottawa.csi5137b.analysis.FeatureExtractor;
+import ca.uottawa.csi5137b.io.FeatureMatrixWriter;
 import de.tudarmstadt.ukp.dkpro.core.io.text.TextReader;
 import de.tudarmstadt.ukp.dkpro.core.opennlp.OpenNlpChunker;
 import de.tudarmstadt.ukp.dkpro.core.opennlp.OpenNlpPosTagger;

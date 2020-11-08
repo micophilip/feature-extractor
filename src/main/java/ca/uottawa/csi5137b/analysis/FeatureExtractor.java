@@ -1,6 +1,6 @@
-package ca.uottawa.csi5137.analysis;
+package ca.uottawa.csi5137b.analysis;
 
-import ca.uottawa.csi5137.type.Features;
+import ca.uottawa.csi5137b.type.Features;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.syntax.type.chunk.Chunk;
