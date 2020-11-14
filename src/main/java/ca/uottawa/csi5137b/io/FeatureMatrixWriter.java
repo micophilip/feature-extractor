@@ -21,7 +21,7 @@ public class FeatureMatrixWriter extends JCasConsumer_ImplBase {
 
     public static final String PARAM_PATH = "path";
     @ConfigurationParameter(name = PARAM_PATH, mandatory = true,
-            description = "Path to the CSV")
+            description = "Path to output")
     private String path;
 
     StringBuilder featureMatrix;
@@ -35,9 +35,7 @@ public class FeatureMatrixWriter extends JCasConsumer_ImplBase {
     @Override
     public void process(JCas aJCas) throws AnalysisEngineProcessException {
         DocumentMetaData metadata = DocumentMetaData.get(aJCas);
-        /* Required for assignment 3:
-         * String cls = metadata.getDocumentTitle().substring(0, metadata.getDocumentTitle().indexOf(".")).toUpperCase();
-         */
+        String cls = metadata.getDocumentTitle().substring(0, metadata.getDocumentTitle().indexOf(".")).toUpperCase();
 
         for (Sentence sentence : select(aJCas, Sentence.class)) {
             for (Features feature : selectCovered(Features.class, sentence)) {
@@ -50,7 +48,8 @@ public class FeatureMatrixWriter extends JCasConsumer_ImplBase {
                         + feature.getFollowedByAdj() + "," + feature.getFollowedByNPAdj() + ","
                         + feature.getNumTokensPrecedingFollowingInfinitiveVerb() + "," + feature.getNumTokensUntilNextPrep() + ","
                         + feature.getFollowedBySeqAdjNP() + "," + feature.getDepRelType() + ","
-                        + feature.getNextFollowingVerbInWeather() + "," + feature.getNextFollowingVerbInCognition());
+                        + feature.getNextFollowingVerbInWeather() + "," + feature.getNextFollowingVerbInCognition() + ","
+                        + cls);
                 featureMatrix.append("\n");
             }
         }
@@ -63,7 +62,34 @@ public class FeatureMatrixWriter extends JCasConsumer_ImplBase {
      */
     public void writeToFile(String content) {
         StringBuilder header = new StringBuilder();
-        header.append("position,sentLenInTokens,numPunct,numPrecedingNP,numFollowingNP,followsPrepPhrase,posTagBefore4,posTagBefore3,posTagBefore2,posTagBefore1,posTagAfter1,posTagAfter2,posTagAfter3,posTagAfter4,followedByVBG,followedByPrep,numFollowingAdj,followsVerb,followedByVerb,followedByAdj,followedByNPAdj,numTokensPrecedingFollowingInfinitiveVerb,numTokensUntilNextPrep,followedBySeqAdjNP,depRelType,nextFollowingVerbInWeather,nextFollowingVerbInCognition");
+        header.append("position,");
+        header.append("sentLenInTokens,");
+        header.append("numPunct,");
+        header.append("numPrecedingNP,");
+        header.append("numFollowingNP,");
+        header.append("followsPrepPhrase,");
+        header.append("posTagBefore4,");
+        header.append("posTagBefore3,");
+        header.append("posTagBefore2,");
+        header.append("posTagBefore1,");
+        header.append("posTagAfter1,");
+        header.append("posTagAfter2,");
+        header.append("posTagAfter3,");
+        header.append("posTagAfter4,");
+        header.append("followedByVBG,");
+        header.append("followedByPrep,");
+        header.append("numFollowingAdj,");
+        header.append("followsVerb,");
+        header.append("followedByVerb,");
+        header.append("followedByAdj,");
+        header.append("followedByNPAdj,");
+        header.append("numTokensPrecedingFollowingInfinitiveVerb,");
+        header.append("numTokensUntilNextPrep,");
+        header.append("followedBySeqAdjNP,");
+        header.append("depRelType,");
+        header.append("nextFollowingVerbInWeather,");
+        header.append("nextFollowingVerbInCognition,");
+        header.append("class");
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path + "output.csv"))) {
             writer.write(header.toString());
@@ -74,13 +100,59 @@ public class FeatureMatrixWriter extends JCasConsumer_ImplBase {
         }
     }
 
+    public void writeToArff(String content) {
+        StringBuilder header = new StringBuilder();
+        header.append("@relation CLAUSEANAPH-NOMANAPH\n\n");
+
+        header.append("@attribute position numeric\n");
+        header.append("@attribute sentLenInTokens numeric\n");
+        header.append("@attribute numPunct numeric\n");
+        header.append("@attribute numPrecedingNP numeric\n");
+        header.append("@attribute numFollowingNP numeric\n");
+        header.append("@attribute followsPrepPhrase {true, false}\n");
+        header.append("@attribute posTagBefore4 {ADJ, ABS, DET, PUNCT, PROPN, VERB, ADP, NOUN, CONJ, PRON, ADV, NUM, INTJ, X}\n");
+        header.append("@attribute posTagBefore3 {NOUN, ABS, ADJ, CONJ, PROPN, VERB, ADV, PRON, ADP, DET, PUNCT, NUM}\n");
+        header.append("@attribute posTagBefore2 {DET, ABS, NOUN, VERB, ADV, ADP, PRON, INTJ, CONJ, ADJ, PROPN, PUNCT}\n");
+        header.append("@attribute posTagBefore1 {VERB, ABS, ADP, PUNCT, ADV, NOUN, PRON, CONJ, DET, ADJ, PROPN}\n");
+        header.append("@attribute posTagAfter1 {PUNCT, VERB, ADV, DET, ADP, CONJ, ADJ, NOUN, PRON}\n");
+        header.append("@attribute posTagAfter2 {PRON, ADV, ABS, ADP, ADJ, NUM, DET, PUNCT, VERB, PROPN, CONJ, NOUN, INTJ}\n");
+        header.append("@attribute posTagAfter3 {VERB, ADJ, ABS, NOUN, DET, ADP, PUNCT, PRON, CONJ, ADV, NUM, PROPN, INTJ}\n");
+        header.append("@attribute posTagAfter4 {VERB, NOUN, ABS, PUNCT, DET, PRON, ADP, NUM, CONJ, ADJ, ADV, PROPN, X}\n");
+        header.append("@attribute followedByVBG {true, false}\n");
+        header.append("@attribute followedByPrep {true, false}\n");
+        header.append("@attribute numFollowingAdj numeric\n");
+        header.append("@attribute followsVerb {true, false}\n");
+        header.append("@attribute followedByVerb {true, false}\n");
+        header.append("@attribute followedByAdj {true, false}\n");
+        header.append("@attribute followedByNPAdj {true, false}\n");
+        header.append("@attribute numTokensPrecedingFollowingInfinitiveVerb numeric\n");
+        header.append("@attribute numTokensUntilNextPrep numeric\n");
+        header.append("@attribute followedBySeqAdjNP {true, false}\n");
+        header.append("@attribute depRelType {dobj, nsubj, prep_of, prep_at, pobj, prep_to, prep_in, iobj, nsubjpass, prep_near, prep_for, dep, parataxis, prep_on, prep_with, prep_about, advmod, root, prep_across, prep_from, prep_before, prep_on_top_of, prep_against, xcomp}\n");
+        header.append("@attribute nextFollowingVerbInWeather {true, false}\n");
+        header.append("@attribute nextFollowingVerbInCognition {true, false}\n");
+
+        header.append("@attribute class {CLAUSEANAPH, NOMANAPH}\n\n");
+        header.append("@data");
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path + "dataset.arff"))) {
+            writer.write(header.toString());
+            writer.write("\n");
+            writer.write(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     @Override
     public void collectionProcessComplete() {
         String data = featureMatrix.toString();
 
         writeToFile(data);
+        writeToArff(data);
 
-        System.out.println("Created feature matrix CSV successfully...");
+        System.out.println("Created feature matrix successfully...");
     }
 
 

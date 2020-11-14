@@ -20,12 +20,13 @@ import static org.uimafit.factory.AnalysisEngineFactory.createPrimitiveDescripti
 
 public class FeatureExtractionPipeline {
 
-    static String PATH = "src/main/resources/io/";
+    static String INPUT_PATH = "src/main/resources/data/";
+    static String OUTPUT_PATH = "src/main/resources/io/";
 
     public static void main(String[] args) throws IOException, UIMAException {
 
         CollectionReaderDescription reader = createReaderDescription(TextReader.class,
-                TextReader.PARAM_SOURCE_LOCATION, PATH, TextReader.PARAM_PATTERNS, "*.txt",
+                TextReader.PARAM_SOURCE_LOCATION, INPUT_PATH, TextReader.PARAM_PATTERNS, "*.txt",
                 TextReader.PARAM_LANGUAGE, "en");
 
         // Tokenizer
@@ -46,7 +47,7 @@ public class FeatureExtractionPipeline {
 
         // Feature Matrix Writer
         AnalysisEngineDescription featureWriter = createPrimitiveDescription(FeatureMatrixWriter.class,
-                FeatureMatrixWriter.PARAM_PATH, PATH);
+                FeatureMatrixWriter.PARAM_PATH, OUTPUT_PATH);
 
         SimplePipeline.runPipeline(reader, tokenizer, posTagger, chunker, parser, extractor, featureWriter);
 

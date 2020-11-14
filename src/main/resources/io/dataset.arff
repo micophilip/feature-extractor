@@ -1,4 +1,35 @@
-position,sentLenInTokens,numPunct,numPrecedingNP,numFollowingNP,followsPrepPhrase,posTagBefore4,posTagBefore3,posTagBefore2,posTagBefore1,posTagAfter1,posTagAfter2,posTagAfter3,posTagAfter4,followedByVBG,followedByPrep,numFollowingAdj,followsVerb,followedByVerb,followedByAdj,followedByNPAdj,numTokensPrecedingFollowingInfinitiveVerb,numTokensUntilNextPrep,followedBySeqAdjNP,depRelType,nextFollowingVerbInWeather,nextFollowingVerbInCognition,class
+@relation CLAUSEANAPH-NOMANAPH
+
+@attribute position numeric
+@attribute sentLenInTokens numeric
+@attribute numPunct numeric
+@attribute numPrecedingNP numeric
+@attribute numFollowingNP numeric
+@attribute followsPrepPhrase {true, false}
+@attribute posTagBefore4 {ADJ, ABS, DET, PUNCT, PROPN, VERB, ADP, NOUN, CONJ, PRON, ADV, NUM, INTJ, X}
+@attribute posTagBefore3 {NOUN, ABS, ADJ, CONJ, PROPN, VERB, ADV, PRON, ADP, DET, PUNCT, NUM}
+@attribute posTagBefore2 {DET, ABS, NOUN, VERB, ADV, ADP, PRON, INTJ, CONJ, ADJ, PROPN, PUNCT}
+@attribute posTagBefore1 {VERB, ABS, ADP, PUNCT, ADV, NOUN, PRON, CONJ, DET, ADJ, PROPN}
+@attribute posTagAfter1 {PUNCT, VERB, ADV, DET, ADP, CONJ, ADJ, NOUN, PRON}
+@attribute posTagAfter2 {PRON, ADV, ABS, ADP, ADJ, NUM, DET, PUNCT, VERB, PROPN, CONJ, NOUN, INTJ}
+@attribute posTagAfter3 {VERB, ADJ, ABS, NOUN, DET, ADP, PUNCT, PRON, CONJ, ADV, NUM, PROPN, INTJ}
+@attribute posTagAfter4 {VERB, NOUN, ABS, PUNCT, DET, PRON, ADP, NUM, CONJ, ADJ, ADV, PROPN, X}
+@attribute followedByVBG {true, false}
+@attribute followedByPrep {true, false}
+@attribute numFollowingAdj numeric
+@attribute followsVerb {true, false}
+@attribute followedByVerb {true, false}
+@attribute followedByAdj {true, false}
+@attribute followedByNPAdj {true, false}
+@attribute numTokensPrecedingFollowingInfinitiveVerb numeric
+@attribute numTokensUntilNextPrep numeric
+@attribute followedBySeqAdjNP {true, false}
+@attribute depRelType {dobj, nsubj, prep_of, prep_at, pobj, prep_to, prep_in, iobj, nsubjpass, prep_near, prep_for, dep, parataxis, prep_on, prep_with, prep_about, advmod, root, prep_across, prep_from, prep_before, prep_on_top_of, prep_against, xcomp}
+@attribute nextFollowingVerbInWeather {true, false}
+@attribute nextFollowingVerbInCognition {true, false}
+@attribute class {CLAUSEANAPH, NOMANAPH}
+
+@data
 1,26,4,0,7,false,ABS,ABS,ABS,ABS,VERB,ADV,ADJ,NOUN,false,false,2,false,true,true,true,0,0,true,nsubj,false,false,CLAUSEANAPH
 14,18,2,4,1,true,PUNCT,CONJ,VERB,ADP,ADV,ADP,NOUN,PUNCT,false,true,0,true,false,false,false,0,2,false,prep_at,false,false,CLAUSEANAPH
 4,5,1,1,0,false,ABS,PROPN,ADV,VERB,PUNCT,ABS,ABS,ABS,false,false,0,true,false,false,false,0,0,false,nsubj,false,false,CLAUSEANAPH
