@@ -18,22 +18,18 @@ whether a specific instance of "it" is clause (referring to a clause) or nominal
 3. Run `main` function in `src/main/java/ca/uottawa/csi5137b/pipelines/FeatureExtractionPipeline.java`
 4. The output file will be placed in the same `io` folder along with the `input.txt`.
 
-## Locations
+## Paths
 
 ### Output:
-
 `src/main/resources/io/output.csv`
 
 ### Input:
-
 Without labels, both classes merged into one file after removing duplicates and cleanup:
-
 `src/main/resources/io/input.txt`
 
 Split by label:
-
 `src/main/resources/data/clause.txt` and `src/main/resources/data/nominal.txt`
 
-### Acknowledgment
+## Acknowledgment
 
 CSI 5137B Course at U Ottawa
