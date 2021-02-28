@@ -91,7 +91,7 @@
         <dependency>
             <groupId>net.sf.extjwnl</groupId>
             <artifactId>extjwnl</artifactId>
-            <version>2.0.2</version>
+            <version>2.0.3</version>
         </dependency>
         <dependency>
             <groupId>net.sf.extjwnl</groupId>
@@ -134,7 +134,7 @@
                                 <typeSystemInclude>src/main/resources/desc/type/Features.xml</typeSystemInclude>
                             </typeSystemIncludes>
 
-                            <typeSystemExcludes></typeSystemExcludes>
+                            <typeSystemExcludes/>
 
                             <outputDirectory>${project.build.sourceDirectory}</outputDirectory>
 
